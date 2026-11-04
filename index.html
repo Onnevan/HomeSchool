@@ -41,7 +41,23 @@ h1{font-size:clamp(30px,5vw,56px);line-height:1.08;margin:12px 0}h2{font-size:cl
 #courseNav{scroll-margin-top:25px}footer{color:#b8c8d7;font-size:14px;line-height:1.6;padding-bottom:45px}
 @media(max-width:620px){header,.wrap,footer{padding:13px}.stages button{font-size:11px;min-width:66px}.scene{min-height:290px}.house{padding:8px 1px}.house small{font-size:8px}.house b{font-size:20px}.courses strong{font-size:15px}.courses button{padding:11px;min-height:96px}.choice{font-size:18px}.nav button{padding:11px 8px;font-size:14px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
-.groupfield{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:stretch;margin:18px 0;max-height:300px;overflow:auto}.groupbox{border:2px solid #60aee6;border-radius:14px;padding:10px;background:#184063;display:flex;gap:5px;flex-wrap:wrap;align-content:center;justify-content:center;min-width:67px;max-width:150px;animation:appear .35s ease both}.groupbox .dot{width:15px;height:15px;background:#f2bd66;border-radius:50%;display:block}.groupbox small{flex-basis:100%;font-size:11px;color:#c8ddec}.groupplus{display:flex;align-items:center;font-size:17px;color:#cee6fc}@keyframes appear{from{opacity:.1;transform:scale(.75)}to{opacity:1;transform:scale(1)}}.place-blocks{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin:22px 0}.place-packet{min-width:105px;max-width:130px;flex:0 1 118px;background:#1a3854;border:1px solid #426787;border-radius:15px;padding:9px 6px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;animation:appear .35s ease both}.place-packet svg{width:90px;height:83px}.place-packet strong{font-size:17px;color:#d8eeff}.place-packet span{font-size:12px;color:#bdd1e1}.empty-place{display:flex;flex-direction:column;align-items:center;gap:7px;padding:25px;color:#bfd2e3}.empty-place p{font-size:15px;margin:0}.empty-circle{font-size:40px;opacity:.6;border:2px dashed #637f98;border-radius:50%;width:75px;height:75px;display:grid;place-items:center}.houses{grid-template-columns:repeat(8,minmax(0,1fr))}.house{overflow:hidden}.house small{font-size:clamp(10px,1vw,13px);line-height:1.2}@media(max-width:900px){.houses{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:500px){.houses{grid-template-columns:repeat(4,minmax(0,1fr))}.house small{font-size:11px}.house b{font-size:25px}.place-packet{flex-basis:95px;min-width:90px}.place-packet svg{width:72px;height:69px}}</style></head>
+.groupfield{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:stretch;margin:18px 0;max-height:300px;overflow:auto}.groupbox{border:2px solid #60aee6;border-radius:14px;padding:10px;background:#184063;display:flex;gap:5px;flex-wrap:wrap;align-content:center;justify-content:center;min-width:67px;max-width:150px;animation:appear .35s ease both}.groupbox .dot{width:15px;height:15px;background:#f2bd66;border-radius:50%;display:block}.groupbox small{flex-basis:100%;font-size:11px;color:#c8ddec}.groupplus{display:flex;align-items:center;font-size:17px;color:#cee6fc}@keyframes appear{from{opacity:.1;transform:scale(.75)}to{opacity:1;transform:scale(1)}}.place-blocks{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin:22px 0}.place-packet{min-width:105px;max-width:130px;flex:0 1 118px;background:#1a3854;border:1px solid #426787;border-radius:15px;padding:9px 6px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;animation:appear .35s ease both}.place-packet svg{width:90px;height:83px}.place-packet strong{font-size:17px;color:#d8eeff}.place-packet span{font-size:12px;color:#bdd1e1}.empty-place{display:flex;flex-direction:column;align-items:center;gap:7px;padding:25px;color:#bfd2e3}.empty-place p{font-size:15px;margin:0}.empty-circle{font-size:40px;opacity:.6;border:2px dashed #637f98;border-radius:50%;width:75px;height:75px;display:grid;place-items:center}.houses{grid-template-columns:repeat(8,minmax(0,1fr))}.house{overflow:hidden}.house small{font-size:clamp(10px,1vw,13px);line-height:1.2}@media(max-width:900px){.houses{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:500px){.houses{grid-template-columns:repeat(4,minmax(0,1fr))}.house small{font-size:11px}.house b{font-size:25px}.place-packet{flex-basis:95px;min-width:90px}.place-packet svg{width:72px;height:69px}}
+.dec-scene{display:grid;gap:15px}.dec-show{min-height:100px;background:#112f49;border-radius:16px;padding:18px;display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap}
+.dec-block{display:grid;place-items:center;border:2px solid #a4dffe;background:#2984b2;border-radius:6px;color:white;animation:decIn .45s both}
+.dec-block.unit{width:20px;height:20px}.dec-block.rod{width:18px;height:85px;background:repeating-linear-gradient(to bottom,#69c8ef 0 8px,#236e9a 8px 9px)}
+.dec-block.flat{width:76px;height:76px;background:repeating-linear-gradient(to bottom,transparent 0 7px,#1c638b 7px 8px),repeating-linear-gradient(to right,#72d5c4 0 7px,#1c638b 7px 8px)}
+.dec-block.cube{width:90px;height:90px;background:repeating-linear-gradient(to bottom,transparent 0 9px,#245f8f 9px 10px),repeating-linear-gradient(to right,#64aee4 0 9px,#245f8f 9px 10px);box-shadow:8px -8px 0 #245e88}
+@keyframes decIn{from{opacity:0;transform:translateY(16px) scale(.75)}to{opacity:1;transform:translateY(0) scale(1)}}
+.dec-big{font-size:clamp(32px,6vw,62px);color:#9cdafe;font-weight:900;text-align:center;font-variant-numeric:tabular-nums}
+.dec-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.dec-card{min-height:115px;background:#214563;border:2px solid #46799b;border-radius:14px;display:grid;align-content:center;justify-items:center;gap:7px;padding:11px;transition:opacity .3s,transform .3s}
+.dec-card b{font-size:clamp(18px,2.5vw,26px)}.dec-card small{color:#d3eafa;font-size:13px}.dec-card.off{opacity:.28;transform:scale(.96);text-decoration:line-through}
+.dec-card .dec-illustration{font-size:30px;color:#9cdafe}.dec-card:nth-child(2) .dec-illustration{color:#75ddb7}.dec-card:nth-child(3) .dec-illustration{color:#f8be69}.dec-card:nth-child(4) .dec-illustration{color:#b8a3f8}.dec-card:nth-child(5) .dec-illustration{color:#ffadad}
+.dec-flow{display:flex;flex-wrap:wrap;gap:9px;align-items:center;justify-content:center}.dec-flow button{min-width:82px}
+.dec-place{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.dec-place button{padding:13px 5px;display:grid;gap:6px;justify-items:center;min-height:95px}.dec-place button.selected{background:#206895;border:2px solid #ffd07c}.dec-place strong{font-size:32px;color:#ffce7b}
+.dec-meter{display:flex;width:100%;height:24px;border-radius:9px;overflow:hidden;background:#1c3b54}.dec-meter span{min-width:0;transition:flex .4s;animation:decIn .35s both}
+@media(max-width:570px){.dec-cards{grid-template-columns:repeat(2,1fr)}.dec-place{grid-template-columns:repeat(2,1fr)}}
+</style></head>
 <body><header><div class="logo">∑ <span>HomeSchool 3.0</span></div><div class="small">MATEMÁTICAS · 1.º ESO</div></header>
 <main class="wrap">
 <section class="hero"><div class="eyebrow">Laboratorio de pensamiento visual</div><h1>Primero lo ves.<br>Después lo entiendes.</h1>
@@ -70,12 +86,12 @@ options:['7 × 3 = 21','7³ = 343','7 + 7 + 7 = 21'],answer:1,why:'7³ represent
 ['Comprende','Del total al lado','Para descubrir el lado conociendo el total, buscamos un número que multiplicado por sí mismo dé esa cantidad.'],
 ['Escribe','Raíz cuadrada','Ahora podemos expresar esa búsqueda con el símbolo de raíz.']],
 options:['8','12','16'],answer:1,why:'12 filas con 12 baldosas suman 144. Por eso √144 = 12.'},
-{title:'La ciudad de los números',topic:'Descomposición polinómica',stages:[
-['Observa','Ocho casas, ocho cifras','Cada casa indica cuánto vale lo que contiene. Toca cualquier casa para explorarla.'],
-['Experimenta','Apaga y enciende aportaciones','Cada cifra aporta una cantidad distinta. Desactiva las casas y observa el total.'],
-['Predice','Mueve una cifra de casa','Prueba a cambiar la cifra seleccionada a la casa vecina: su valor cambia diez veces.'],
-['Comprende','Los ceros reservan el sitio','El cero no aporta cantidad, pero mantiene cada cifra en la posición que le corresponde.'],
-['Escribe','De la ciudad a las potencias','Primero vemos la suma de aportaciones; después la expresamos con potencias de diez.']],
+{title:'Construye un número gigante',topic:'Descomposición polinómica',stages:[
+['Observa','Juntar diez piezas','Descubre cómo diez piezas pequeñas pueden convertirse en una pieza mayor.'],
+['Experimenta','Separar un número gigante','Descubre que 60.523.040 puede construirse a partir de paquetes de distintos tamaños.'],
+['Experimenta','Quitar una pieza','Prueba a quitar cantidades del número y luego a volver a ponerlas.'],
+['Descubre','Mismo cuatro, distinto valor','Mueve una sola cifra para comprobar cómo cambia su valor según la posición.'],
+['Escribe','Así se escribe en matemáticas','Primero sumamos las cantidades que hemos visto; después las expresamos con potencias.']],
 options:['6 × 10⁷','6 × 10⁶','6 × 10⁸'],answer:0,why:'El 6 de 60.523.040 ocupa la posición de decenas de millón, equivalente a 10⁷.'},
 {title:'El taller de factores',topic:'Propiedades de las potencias',stages:[
 ['Observa','Dos cadenas de factores','En cada caja aparece un factor. Podemos juntar o cancelar cadenas.'],
@@ -143,6 +159,77 @@ function powerModel(base,depth){
 }
 function groups(count,base,max){const dots=Math.min(count,max||180);return '<div class="chips">'+Array.from({length:dots},(_,i)=>'<span class="chip" style="animation:appear .2s ease">'+base+'</span>').join('')+(count>dots?'<span class="tag">y '+format(count-dots)+' más</span>':'')+'</div>'}
 function grid(n,stylefn){return '<div class="tilegrid" style="grid-template-columns:repeat('+n+',1fr)">'+Array.from({length:n*n},(_,i)=>'<span class="tile '+(stylefn?stylefn(i,n):'')+'"></span>').join('')+'</div>'}
+
+const decimalParts=[
+ {n:6,u:10000000,c:'#6bbaf1'}, {n:5,u:100000,c:'#72d3b2'}, {n:2,u:10000,c:'#edb767'}, {n:3,u:1000,c:'#b5a2f0'}, {n:4,u:10,c:'#ee9e9e'}
+];
+const decimalState={level:0,split:false,enabled:[true,true,true,true,true],last:-1,place:1};
+function decimalBlocks(type,count){
+ const kind=['unit','rod','flat','cube'][type];
+ return '<div class="dec-show">'+Array.from({length:count},(_,i)=>'<span class="dec-block '+kind+'" style="animation-delay:'+(i*50)+'ms" aria-label="Bloque de '+format(10**type)+' unidades"></span>').join('')+'</div>';
+}
+function decimalCards(togglable){
+ return '<div class="dec-cards">'+decimalParts.map((p,i)=>
+ '<button class="dec-card '+(togglable&&!decimalState.enabled[i]?'off':'')+'" data-dec="'+i+'">'+
+ '<span class="dec-illustration">▰</span><b>'+format(p.n*p.u)+'</b>'+
+ '<small>'+p.n+' paquetes de '+format(p.u)+'</small>'+
+ (togglable?'<small>'+(decimalState.enabled[i]?'Tocar para quitar':'Tocar para recuperar')+'</small>':'')+'</button>').join('')+'</div>';
+}
+function decimalScene(stage){
+ const s=decimalState;
+ if(stage===0){
+  const labels=['10 unidades sueltas','10 barras de diez','10 placas de cien','10 cubos de mil'];
+  return '<div class="dec-scene"><h3>Junta diez piezas iguales</h3><p>Las piezas cambian de forma, pero su cantidad total no.</p>'+
+   decimalBlocks(s.level,10)+'<div class="dec-big">'+format(10**(s.level+1))+' unidades</div>'+
+   '<p class="prompt">'+labels[s.level]+'. '+(s.level<3?'Pulsa para convertirlas en una pieza más grande.':'¡Has llegado a diez mil!')+'</p>'+
+   '<div class="dec-flow">'+button('Agrupar las diez','decGroup','class="primary" '+(s.level>=3?'disabled':''))+button('Reiniciar','decReset')+'</div></div>';
+ }
+ if(stage===1){
+  return '<div class="dec-scene"><h3>Un número puede separarse en paquetes</h3>'+
+   '<div class="dec-big">60.523.040</div>'+
+   '<div class="dec-flow">'+button(s.split?'Volver a unir':'Separar las piezas','decSplit','class="primary"')+'</div>'+
+   (s.split?decimalCards(false)+'<p class="prompt">Cinco cantidades diferentes, que juntas forman 60.523.040.</p>':
+   '<div class="dec-show"><span class="dec-big">Un solo número</span></div><p class="prompt">¿En qué cantidades está dividido por dentro?</p>')+'</div>';
+ }
+ if(stage===2){
+  const total=decimalParts.reduce((sum,p,i)=>sum+(s.enabled[i]?p.n*p.u:0),0);
+  return '<div class="dec-scene"><h3>Quita y devuelve una cantidad</h3>'+
+   '<p>Toca una tarjeta. La cantidad se quita del total. Vuelve a tocar para recuperarla.</p>'+
+   '<div class="dec-big" aria-live="polite">'+format(total)+'</div>'+
+   '<div class="dec-meter">'+decimalParts.map((p,i)=>s.enabled[i]?'<span style="flex:'+(p.n*p.u/100000+0.1)+';background:'+p.c+'"></span>':'').join('')+'</div>'+
+   decimalCards(true)+
+   '<p class="prompt" aria-live="polite">'+(s.last<0?'Empieza quitando 500.000. ¿Qué número queda?':(s.enabled[s.last]?'Has recuperado ':'Has quitado ')+format(decimalParts[s.last].n*decimalParts[s.last].u)+'. El nuevo total es '+format(total)+'.')+'</p>'+
+   '<div class="dec-flow">'+button('Recuperar todas','decRestore')+'</div></div>';
+ }
+ const amounts=[1,10,100,1000],names=['Unidades','Decenas','Centenas','Millares'],v=s.place;
+ return '<div class="dec-scene"><h3>El mismo 4, en distintas posiciones</h3>'+
+  '<p>Elige una columna o arrastra la cifra 4. Compara lo que vale cada vez.</p>'+
+  '<div class="dec-place">'+amounts.map((x,i)=>'<button data-place="'+i+'" class="'+(v===i?'selected':'')+'"><small>'+names[i]+'</small>'+(v===i?'<strong draggable="true" id="digit4">4</strong>':'<strong>—</strong>')+'</button>').join('')+'</div>'+
+  '<div class="dec-big" aria-live="polite">'+format(4*amounts[v])+'</div>'+
+  decimalBlocks(v,4)+
+  '<p class="prompt">Son cuatro '+['cubitos sueltos','barras de diez','placas de cien','cubos de mil'][v]+'. El cuatro no ha cambiado, pero ahora representa '+format(4*amounts[v])+' unidades.</p>'+
+  '<div class="dec-flow">'+button('← Aumentar valor','decIncrease',' '+(v===3?'disabled':''))+button('Reducir valor →','decDecrease',' '+(v===0?'disabled':''))+'</div></div>';
+}
+function bindDecimal(){
+ const rerender=()=>renderScene(),s=decimalState;
+ if(state.stage===0){$('decGroup').onclick=()=>{s.level=Math.min(3,s.level+1);rerender()};$('decReset').onclick=()=>{s.level=0;rerender()}}
+ if(state.stage===1){$('decSplit').onclick=()=>{s.split=!s.split;rerender()}}
+ if(state.stage===2){
+  document.querySelectorAll('[data-dec]').forEach(el=>el.onclick=()=>{let i=+el.dataset.dec;s.enabled[i]=!s.enabled[i];s.last=i;rerender()});
+  $('decRestore').onclick=()=>{s.enabled=[true,true,true,true,true];s.last=-1;rerender()};
+ }
+ if(state.stage===3){
+  const move=i=>{s.place=Math.max(0,Math.min(3,i));rerender()};
+  document.querySelectorAll('[data-place]').forEach(el=>{
+   el.onclick=()=>move(+el.dataset.place);
+   el.ondragover=e=>e.preventDefault();
+   el.ondrop=e=>{e.preventDefault();move(+el.dataset.place)};
+  });
+  $('decIncrease').onclick=()=>move(s.place+1);
+  $('decDecrease').onclick=()=>move(s.place-1);
+ }
+}
+
 function scene(n){
  const stage=state.stage;
  if(stage===4)return finalScene(n);
@@ -160,19 +247,7 @@ function scene(n){
    '<div class="result">'+nside+' filas de '+nside+' = '+nside*nside+' baldosas</div>'+
    (stage===3?'<div class="prompt">Cuando buscamos el lado a partir del total estamos calculando una raíz cuadrada.</div>':'');
  }
- if(n===2){
-   const digits=[6,0,5,2,3,0,4,0],labels=['10 millones','1 millón','100 mil','10 mil','1 mil','100','10','1'];
-   const total=digits.reduce((a,d,i)=>a+(exp.houseOn[i]?d*10**(7-i):0),0);
-   const dest=Math.max(0,Math.min(7,exp.house-exp.houseShift));
-   const val=digits[exp.house]*10**(7-dest);
-   const houses='<div class="houses">'+digits.map((d,i)=>'<button class="house '+((exp.house===i||dest===i)?'active ':'')+(d===0?'zero':'')+'" data-house="'+i+'"><small>'+labels[i]+'</small><b>'+d+'</b></button>').join('')+'</div>';
-   const blocks=digits[exp.house]===0?'<div class="empty-place"><span class="empty-circle">0</span><strong>Sin bloques en esta casa</strong><p>El cero ocupa una posición, pero no aporta cantidad.</p></div>':'<div class="place-blocks">'+Array.from({length:digits[exp.house]},(_,i)=>'<div class="place-packet" style="--level:'+((7-dest)%5)+';--accent:'+['#6db9f0','#72c8ab','#e9b467','#b6a0ef','#ee97a7'][dest%5]+'"><svg viewBox="0 0 112 100" role="img" aria-label="Paquete de '+format(10**(7-dest))+' unidades"><g fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"><path d="M17 37 L56 19 L95 37 L56 56 Z" fill="var(--accent)" opacity=".65"/><path d="M17 37 V72 L56 91 V56 Z" fill="var(--accent)" opacity=".4"/><path d="M56 56 L95 37 V72 L56 91 Z" fill="var(--accent)" opacity=".2"/>'+Array.from({length:Math.min(7-dest,5)},(_,j)=>'<path d="M17 '+(44+j*5)+' L56 '+(63+j*5)+' L95 '+(44+j*5)+'" opacity=".45"/>').join('')+'</g></svg><strong>'+format(10**(7-dest))+'</strong><span>unidades</span></div>').join('')+'</div>';
-   return '<div class="scene-title">La calle de las cifras</div><p>¡Toca una casa! Cada cifra tiene un valor distinto según dónde vive.</p>'+
-   houses+'<div class="prompt">Casa seleccionada: <strong>'+labels[exp.house]+'</strong>. Contiene '+digits[exp.house]+' '+(digits[exp.house]===1?'grupo':'grupos')+'.</div>'+
-   blocks+(exp.houseShift!==0?'<div class="prompt">Has llevado el '+digits[exp.house]+' desde «'+labels[exp.house]+'» hasta «'+labels[dest]+'».</div>':'')+'<div class="result">'+format(val)+'</div>'+
-   (stage>=1?'<div class="actionbar">'+button(exp.houseOn[exp.house]?'Apagar esta casa':'Encender esta casa','toggleHouse')+button('Mover una casa a la izquierda','moveLeft')+button('Mover una casa a la derecha','moveRight')+'</div><p class="mini">Total de las casas encendidas: <strong>'+format(total)+'</strong></p>':'')+
-   (stage>=3?'<div class="prompt">Aportes: 60.000.000 + 500.000 + 20.000 + 3.000 + 40. Los ceros mantienen el lugar de las otras cifras.</div>':'');
- }
+ if(n===2)return decimalScene(stage);
  if(n===3){
    const f=exp.cancel;
    return '<div class="scene-title">Cancela tres factores</div><p>Dividimos cinco doses entre tres doses. Cancela los tres que aparecen tanto arriba como abajo.</p>'+
@@ -301,12 +376,7 @@ function bindScene(n){
   $('powReset').onclick=()=>{exp.powerDepth=1;re()};
  }
  if(n===1){$('side').oninput=e=>{exp.side=+e.target.value;re()}}
- if(n===2){
-  document.querySelectorAll('[data-house]').forEach(el=>el.onclick=()=>{exp.house=+el.dataset.house;exp.houseShift=0;re()});
-  if($('toggleHouse'))$('toggleHouse').onclick=()=>{exp.houseOn[exp.house]=!exp.houseOn[exp.house];re()};
-  if($('moveLeft'))$('moveLeft').onclick=()=>{exp.houseShift=Math.min(7-(7-exp.house),exp.houseShift+1);re()};
-  if($('moveRight'))$('moveRight').onclick=()=>{exp.houseShift=Math.max(-(7-exp.house),exp.houseShift-1);re()};
- }
+ if(n===2){bindDecimal();}
  if(n===3){
   $('cancelOne').onclick=()=>{exp.cancel=Math.min(3,exp.cancel+1);re()};
   $('cancelReset').onclick=()=>{exp.cancel=0;re()};
@@ -384,7 +454,7 @@ function prediction(n){
  (solved?'<div class="feedback '+(picked===pred.a?'':'bad')+'">'+(picked===pred.a?'¡Buena predicción! ':'Esta vez no. ')+pred.why+'</div>'+ (picked!==pred.a?'<button id="retryPrediction">Volver a intentarlo</button>':''):'')+'</div>';
 }
 
-function renderScene(){const n=state.lesson;$('scene').innerHTML=scene(n)+(state.stage===2?prediction(n):'');bindScene(n);if(state.stage===2){document.querySelectorAll('[data-predict]').forEach(el=>el.onclick=()=>{if(predictionChoice[n]!==undefined)return;predictionChoice[n]=+el.dataset.predict;renderScene()});if($('retryPrediction'))$('retryPrediction').onclick=()=>{delete predictionChoice[n];renderScene()}}}
+function renderScene(){const n=state.lesson;$('scene').innerHTML=scene(n)+(state.stage===2&&n!==2?prediction(n):'');bindScene(n);if(state.stage===2&&n!==2){document.querySelectorAll('[data-predict]').forEach(el=>el.onclick=()=>{if(predictionChoice[n]!==undefined)return;predictionChoice[n]=+el.dataset.predict;renderScene()});if($('retryPrediction'))$('retryPrediction').onclick=()=>{delete predictionChoice[n];renderScene()}}}
 function go(n,stage){
  state.lesson=Math.max(0,Math.min(9,n));state.stage=Math.max(0,Math.min(4,stage));save();render();
  window.scrollTo({top:0,behavior:'smooth'});
