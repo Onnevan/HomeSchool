@@ -57,6 +57,19 @@ h1{font-size:clamp(30px,5vw,56px);line-height:1.08;margin:12px 0}h2{font-size:cl
 .dec-place{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.dec-place button{padding:13px 5px;display:grid;gap:6px;justify-items:center;min-height:95px}.dec-place button.selected{background:#206895;border:2px solid #ffd07c}.dec-place strong{font-size:32px;color:#ffce7b}
 .dec-meter{display:flex;width:100%;height:24px;border-radius:9px;overflow:hidden;background:#1c3b54}.dec-meter span{min-width:0;transition:flex .4s;animation:decIn .35s both}
 @media(max-width:570px){.dec-cards{grid-template-columns:repeat(2,1fr)}.dec-place{grid-template-columns:repeat(2,1fr)}}
+
+.dec-segments-title{text-align:center;font-weight:800;font-size:19px;margin:8px 0 0;color:#d7efff}
+.dec-segments{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:3px 0 0}
+.dec-segment{min-width:0;min-height:102px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:11px 5px;border:2px solid var(--piece);background:#173149;transition:opacity .25s,transform .25s,border-style .25s}
+.dec-segment-color{width:64%;height:19px;background:var(--piece);border-radius:5px;transition:background .25s}
+.dec-segment strong{font-size:clamp(13px,1.7vw,21px);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.dec-segment small{font-size:13px;color:#d5e8fa}
+.dec-segment.removed{border-style:dashed;border-color:#647487;background:#142639}
+.dec-segment.removed .dec-segment-color{background:repeating-linear-gradient(135deg,#54647a 0 5px,#253c52 5px 10px)}
+.dec-segment.removed strong{text-decoration:line-through;color:#92a6b9}
+.dec-scale-note{text-align:center;font-size:14px;color:#aecde4;margin:0 0 12px}
+.dec-delta{text-align:center;font-size:clamp(18px,2.7vw,26px);font-weight:800;color:#ffd282;background:#263f57;border-radius:11px;padding:10px}
+@media(max-width:650px){.dec-segments{grid-template-columns:repeat(2,minmax(0,1fr))}.dec-segment:last-child{grid-column:1/-1}.dec-segment{min-height:85px}}
 </style></head>
 <body><header><div class="logo">∑ <span>HomeSchool 3.0</span></div><div class="small">MATEMÁTICAS · 1.º ESO</div></header>
 <main class="wrap">
@@ -198,7 +211,11 @@ function decimalScene(stage){
   return '<div class="dec-scene"><h3>Quita y devuelve una cantidad</h3>'+
    '<p>Toca una tarjeta. La cantidad se quita del total. Vuelve a tocar para recuperarla.</p>'+
    '<div class="dec-big" aria-live="polite">'+format(total)+'</div>'+
-   '<div class="dec-meter">'+decimalParts.map((p,i)=>s.enabled[i]?'<span style="flex:'+(p.n*p.u/100000+0.1)+';background:'+p.c+'"></span>':'').join('')+'</div>'+
+   (s.last>=0?'<div class="dec-delta" aria-live="polite">'+(s.enabled[s.last]?'+ ':'− ')+format(decimalParts[s.last].n*decimalParts[s.last].u)+'</div>':'')+
+   '<p class="dec-segments-title">Las 5 piezas que forman el número</p>'+
+   '<div class="dec-segments" role="group" aria-label="Cinco piezas del número, sin escala de tamaños">'+
+    decimalParts.map((p,i)=>'<button data-dec="'+i+'" class="dec-segment '+(s.enabled[i]?'':'removed')+'" style="--piece:'+p.c+'" aria-pressed="'+s.enabled[i]+'"><span class="dec-segment-color"></span><strong>'+format(p.n*p.u)+'</strong><small>'+(s.enabled[i]?'En el número':'Quitada')+'</small></button>').join('')+
+   '</div><p class="dec-scale-note">Aquí todas las piezas tienen el mismo ancho para que puedas distinguirlas. Sus cantidades no son del mismo tamaño.</p>'+
    decimalCards(true)+
    '<p class="prompt" aria-live="polite">'+(s.last<0?'Empieza quitando 500.000. ¿Qué número queda?':(s.enabled[s.last]?'Has recuperado ':'Has quitado ')+format(decimalParts[s.last].n*decimalParts[s.last].u)+'. El nuevo total es '+format(total)+'.')+'</p>'+
    '<div class="dec-flow">'+button('Recuperar todas','decRestore')+'</div></div>';
