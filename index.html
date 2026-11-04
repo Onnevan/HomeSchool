@@ -170,8 +170,8 @@ function scene(n){
  if(n===3){
    const f=exp.cancel;
    return '<div class="scene-title">Cancela tres factores</div><p>Dividimos cinco doses entre tres doses. Cancela los tres que aparecen tanto arriba como abajo.</p>'+
-   '<div class="chips">'+Array.from({length:5},(_,i)=>'<button data-factor="'+i+'" class="chip '+(i<f?'cancel':'')+'" aria-label="factor '+(i+1)+'">2</button>').join('')+'</div>'+
-   '<div class="legend"><span>Numerador: cinco factores de 2</span><span>Divisor: tres factores de 2</span></div>'+
+   '<p class="mini">Arriba: 5 factores que tenemos</p><div class="chips">'+Array.from({length:5},(_,i)=>'<button data-factor="'+i+'" class="chip '+(i<f?'cancel':'')+'" aria-label="factor '+(i+1)+'">2</button>').join('')+'</div>'+
+   '<p class="mini">Abajo: 3 factores que podemos cancelar</p><div class="chips">'+Array.from({length:3},(_,i)=>'<span class="chip orange '+(i<f?'cancel':'')+'">2</span>').join('')+'</div>'+
    '<div class="result">'+(f===3?'Quedan dos factores':'Cancelados: '+f+' de 3')+'</div>'+
    '<div class="actionbar">'+button('Cancelar otro factor','cancelOne','class="primary"')+button('Repetir','cancelReset')+'</div>'+
    (stage>=3?'<div class="equation">2⁵ ÷ 2³ = 2²</div>':'');
@@ -187,10 +187,13 @@ function scene(n){
  }
  if(n===5){
    const root=Math.floor(Math.sqrt(exp.root)),rest=exp.root-root*root,upper=(root+1)**2;
-   const n=21;let cells='';
-   for(let i=0;i<n*n;i++){const x=i%n,y=Math.floor(i/n);cells+='<span class="tile '+(x<root&&y<root?'':(i<400+rest?'extra':'inactive'))+'"></span>'}
+   const n=root+1;let cells='',placed=0;
+   for(let i=0;i<n*n;i++){const x=i%n,y=Math.floor(i/n),inside=x<root&&y<root;let klass='';
+    if(!inside){klass=placed<rest?'extra':'inactive';placed++}
+    cells+='<span class="tile '+klass+'"></span>';
+   }
    return '<div class="scene-title">Un suelo con fichas sobrantes</div>'+controls('Baldosas disponibles','root',390,450,exp.root)+
-   '<div class="tilegrid" style="grid-template-columns:repeat(21,1fr)">'+cells+'</div>'+
+   '<div class="tilegrid" style="grid-template-columns:repeat('+n+',1fr)">'+cells+'</div>'+
    '<div class="result">Lado completo: '+root+' · Sobran: '+rest+'</div>'+
    '<div class="prompt">El siguiente cuadrado completo necesita '+upper+' fichas. '+(upper-exp.root)+' más de las que tenemos.</div>';
  }
@@ -316,14 +319,27 @@ function bindScene(n){
   const svg=$('angleSvg'),drag=$('dragAngle');
   if(drag){
     drag.style.cursor='grab';
-    drag.onpointerdown=e=>{e.preventDefault();drag.setPointerCapture(e.pointerId)};
-    drag.onpointermove=e=>{
-      if(!drag.hasPointerCapture(e.pointerId))return;
+    let dragging=false;
+    svg.onpointerdown=e=>{if(e.target.id!=='dragAngle')return; e.preventDefault();dragging=true;svg.setPointerCapture(e.pointerId)};
+    svg.onpointermove=e=>{
+      if(!dragging)return;
       const rect=svg.getBoundingClientRect();
       const x=(e.clientX-rect.left)*340/rect.width-160;
       const y=120-(e.clientY-rect.top)*250/rect.height;
-      if(x>0){exp.angle=Math.max(10,Math.min(80,Math.round(Math.atan2(Math.max(0,y),x)*180/Math.PI)));re()}
+      if(x>0){
+       const a=Math.max(10,Math.min(80,Math.round(Math.atan2(Math.max(0,y),x)*180/Math.PI)));
+       exp.angle=a;
+       const rad=a*Math.PI/180;
+       drag.setAttribute('cx',160+130*Math.cos(rad));
+       drag.setAttribute('cy',120-130*Math.sin(rad));
+       svg.querySelectorAll('text')[0].textContent=a+'°';
+       svg.querySelectorAll('text')[1].textContent=a+'°';
+       svg.querySelectorAll('text')[2].textContent=(180-a)+'°';
+       svg.querySelectorAll('text')[3].textContent=(180-a)+'°';
+      }
     };
+    svg.onpointerup=e=>{if(!dragging)return;dragging=false;svg.releasePointerCapture(e.pointerId);re()};
+    svg.onpointercancel=()=>{dragging=false;re()};
   }
  }
  if(n===9){
