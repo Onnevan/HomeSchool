@@ -163,7 +163,7 @@ function grid(n,stylefn){return '<div class="tilegrid" style="grid-template-colu
 const decimalParts=[
  {n:6,u:10000000,c:'#6bbaf1'}, {n:5,u:100000,c:'#72d3b2'}, {n:2,u:10000,c:'#edb767'}, {n:3,u:1000,c:'#b5a2f0'}, {n:4,u:10,c:'#ee9e9e'}
 ];
-const decimalState={level:0,split:false,enabled:[true,true,true,true,true],last:-1,place:1};
+const decimalState={level:0,grouped:false,split:false,enabled:[true,true,true,true,true],last:-1,place:1};
 function decimalBlocks(type,count){
  const kind=['unit','rod','flat','cube'][type];
  return '<div class="dec-show">'+Array.from({length:count},(_,i)=>'<span class="dec-block '+kind+'" style="animation-delay:'+(i*50)+'ms" aria-label="Bloque de '+format(10**type)+' unidades"></span>').join('')+'</div>';
@@ -179,10 +179,12 @@ function decimalScene(stage){
  const s=decimalState;
  if(stage===0){
   const labels=['10 unidades sueltas','10 barras de diez','10 placas de cien','10 cubos de mil'];
-  return '<div class="dec-scene"><h3>Junta diez piezas iguales</h3><p>Las piezas cambian de forma, pero su cantidad total no.</p>'+
-   decimalBlocks(s.level,10)+'<div class="dec-big">'+format(10**(s.level+1))+' unidades</div>'+
-   '<p class="prompt">'+labels[s.level]+'. '+(s.level<3?'Pulsa para convertirlas en una pieza más grande.':'¡Has llegado a diez mil!')+'</p>'+
-   '<div class="dec-flow">'+button('Agrupar las diez','decGroup','class="primary" '+(s.level>=3?'disabled':''))+button('Reiniciar','decReset')+'</div></div>';
+  const val=10**(s.level+1);
+  const visual=s.grouped?(s.level<3?decimalBlocks(s.level+1,1):'<div class="dec-show"><strong>Un paquete de 10.000</strong></div>'):decimalBlocks(s.level,10);
+  return '<div class="dec-scene"><h3>Junta diez piezas iguales</h3><p>Diez piezas pequeñas equivalen a una grande. La cantidad no cambia.</p>'+
+   visual+'<div class="dec-big">'+format(val)+' unidades</div>'+
+   '<p class="prompt">'+(s.grouped?'¡Una sola pieza vale lo mismo que las diez anteriores!':labels[s.level]+'. ¿Podrías juntarlas?')+'</p>'+
+   '<div class="dec-flow">'+(s.grouped?button(s.level<3?'Preparar diez piezas del siguiente tamaño':'Volver al principio','decNext','class="primary"'):button('Agrupar las diez','decGroup','class="primary"'))+button('Reiniciar','decReset')+'</div></div>';
  }
  if(stage===1){
   return '<div class="dec-scene"><h3>Un número puede separarse en paquetes</h3>'+
@@ -212,7 +214,11 @@ function decimalScene(stage){
 }
 function bindDecimal(){
  const rerender=()=>renderScene(),s=decimalState;
- if(state.stage===0){$('decGroup').onclick=()=>{s.level=Math.min(3,s.level+1);rerender()};$('decReset').onclick=()=>{s.level=0;rerender()}}
+ if(state.stage===0){
+  if($('decGroup'))$('decGroup').onclick=()=>{s.grouped=true;rerender()};
+  if($('decNext'))$('decNext').onclick=()=>{s.level=s.level<3?s.level+1:0;s.grouped=false;rerender()};
+  $('decReset').onclick=()=>{s.level=0;s.grouped=false;rerender()};
+ }
  if(state.stage===1){$('decSplit').onclick=()=>{s.split=!s.split;rerender()}}
  if(state.stage===2){
   document.querySelectorAll('[data-dec]').forEach(el=>el.onclick=()=>{let i=+el.dataset.dec;s.enabled[i]=!s.enabled[i];s.last=i;rerender()});
