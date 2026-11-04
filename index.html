@@ -41,7 +41,7 @@ h1{font-size:clamp(30px,5vw,56px);line-height:1.08;margin:12px 0}h2{font-size:cl
 #courseNav{scroll-margin-top:25px}footer{color:#b8c8d7;font-size:14px;line-height:1.6;padding-bottom:45px}
 @media(max-width:620px){header,.wrap,footer{padding:13px}.stages button{font-size:11px;min-width:66px}.scene{min-height:290px}.house{padding:8px 1px}.house small{font-size:8px}.house b{font-size:20px}.courses strong{font-size:15px}.courses button{padding:11px;min-height:96px}.choice{font-size:18px}.nav button{padding:11px 8px;font-size:14px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
-</style></head>
+.groupfield{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:stretch;margin:18px 0;max-height:300px;overflow:auto}.groupbox{border:2px solid #60aee6;border-radius:14px;padding:10px;background:#184063;display:flex;gap:5px;flex-wrap:wrap;align-content:center;justify-content:center;min-width:67px;max-width:150px;animation:appear .35s ease both}.groupbox .dot{width:15px;height:15px;background:#f2bd66;border-radius:50%;display:block}.groupbox small{flex-basis:100%;font-size:11px;color:#c8ddec}.groupplus{display:flex;align-items:center;font-size:17px;color:#cee6fc}@keyframes appear{from{opacity:.1;transform:scale(.75)}to{opacity:1;transform:scale(1)}}</style></head>
 <body><header><div class="logo">∑ <span>HomeSchool 3.0</span></div><div class="small">MATEMÁTICAS · 1.º ESO</div></header>
 <main class="wrap">
 <section class="hero"><div class="eyebrow">Laboratorio de pensamiento visual</div><h1>Primero lo ves.<br>Después lo entiendes.</h1>
@@ -136,6 +136,11 @@ function esc(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;',
 function format(x){return Number(x).toLocaleString('es-ES')}
 function button(label,id,extra){return '<button id="'+id+'" '+(extra||'')+'>'+label+'</button>'}
 function controls(label,id,min,max,val){return '<div class="sliders"><label for="'+id+'">'+label+' <span class="value" id="v-'+id+'">'+val+'</span></label><input id="'+id+'" type="range" min="'+min+'" max="'+max+'" value="'+val+'"></div>'}
+function powerModel(base,depth){
+ const packs=base**Math.max(0,depth-1),shown=Math.min(18,packs);
+ return '<div class="groupfield">'+Array.from({length:shown},(_,i)=>'<div class="groupbox">'+Array.from({length:base},()=>'<span class="dot"></span>').join('')+'<small>grupo '+(i+1)+'</small></div>').join('')+
+ (packs>shown?'<div class="groupplus">+ '+format(packs-shown)+' grupos iguales</div>':'')+'</div>';
+}
 function groups(count,base,max){const dots=Math.min(count,max||180);return '<div class="chips">'+Array.from({length:dots},(_,i)=>'<span class="chip" style="animation:appear .2s ease">'+base+'</span>').join('')+(count>dots?'<span class="tag">y '+format(count-dots)+' más</span>':'')+'</div>'}
 function grid(n,stylefn){return '<div class="tilegrid" style="grid-template-columns:repeat('+n+',1fr)">'+Array.from({length:n*n},(_,i)=>'<span class="tile '+(stylefn?stylefn(i,n):'')+'"></span>').join('')+'</div>'}
 function scene(n){
@@ -144,7 +149,7 @@ function scene(n){
  if(n===0){
   const count=exp.powerBase**exp.powerDepth;return '<div class="scene-title">Máquina de grupos</div><p>Después de cada pulsación, cada unidad se transforma en '+exp.powerBase+'.</p>'+
    controls('Objetos por grupo','bpow',2,5,exp.powerBase)+
-   '<div class="result">'+format(count)+' unidades</div>'+groups(count,'●',120)+
+   '<div class="result">'+format(count)+' unidades</div>'+powerModel(exp.powerBase,exp.powerDepth)+
    '<div class="actionbar">'+button('Multiplicar otra vez','powMore','class="primary"')+button('Volver al principio','powReset')+'</div>'+
    '<div class="prompt">Has repetido el crecimiento '+exp.powerDepth+' '+(exp.powerDepth===1?'vez':'veces')+'. ¿Qué pasará en el siguiente paso?</div>'+
    (stage===3?'<div class="equation">'+exp.powerBase+'<sup>'+exp.powerDepth+'</sup> = '+count+'</div>':'');
