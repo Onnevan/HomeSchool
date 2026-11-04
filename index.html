@@ -21,6 +21,39 @@ input[type=range]{width:100%;accent-color:#6bb9ff;cursor:pointer;height:28px}.ti
 .nav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;border-top:1px solid var(--line);padding-top:22px}
 footer{color:var(--muted);font-size:14px;line-height:1.6}.hide{display:none!important}
 @media(max-width:560px){header,.wrap,footer{padding:15px}.course{gap:8px}.course strong{font-size:15px}.course button{min-height:100px;padding:12px}.steps button{font-size:11px}.nav button{padding:12px}}
+
+/* HomeSchool Visual Thinking 2.0 */
+.experiment{padding:20px;background:linear-gradient(145deg,#0d2339,#102c45);border:1px solid #315977;border-radius:20px;margin:18px 0;overflow:hidden}
+.experiment h3{font-size:clamp(20px,3vw,27px);margin:0 0 11px;color:#f4f9ff}
+.experiment p{font-size:17px;line-height:1.5}
+.math-action{border:2px solid #66b7ee;background:#194a72;margin:10px 0;padding:13px 18px;min-height:47px}
+.math-action:focus-visible{outline:3px solid #ffd174}
+.equation-big{font-size:clamp(24px,4.2vw,39px);font-weight:900;text-align:center;color:#a4ddff;min-height:52px;letter-spacing:.02em}
+.microhint{font-size:15px!important;color:#c4d7e9}
+.viz-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:5px}
+.viz-cell{border-radius:9px;min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#204b70;border:1px solid #5a9cc5;cursor:pointer}
+.viz-cell b{font-size:27px}.viz-cell small{font-size:12px;color:#cde5f7}.viz-cell.zero{opacity:.42}.viz-cell.selected{background:#177dbb;box-shadow:0 0 0 3px #ffd074 inset;transform:translateY(-2px)}
+.viz-answer{background:#173c55;border-left:4px solid #64cbad;padding:14px;border-radius:8px;min-height:56px;font-size:19px}
+.factor-strip{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:7px;margin:15px 0}
+.factor{background:#358dca;border-radius:9px;min-width:40px;padding:10px;text-align:center;font-weight:800;font-size:22px;transition:.35s}
+.factor.cancelled{background:#465668;opacity:.35;text-decoration:line-through;transform:scale(.75)}
+.factor.divisor{background:#dbab5a;color:#142536}
+.viz-square{display:grid;grid-template-columns:repeat(22,1fr);width:min(100%,340px);margin:15px auto;gap:2px;aspect-ratio:1}
+.viz-square span{background:#328bc9;border-radius:2px;transition:background .2s}
+.viz-square span.extra{background:#e0a951}
+.viz-area{display:grid;grid-template-columns:repeat(12,1fr);width:min(100%,350px);margin:18px auto;gap:2px;aspect-ratio:1}
+.viz-area span{background:#3689be;border-radius:2px;transition:background .3s}
+.viz-area span.new{background:#e8aa4c;animation:appear .4s ease both}
+.viz-area span.corner{background:#6fd0ac;animation:appear .5s ease both}
+@keyframes appear{from{opacity:.12;transform:scale(.65)}to{opacity:1;transform:scale(1)}}
+.viz-numberline{height:60px;position:relative;margin:24px 4px;background:linear-gradient(90deg,#347db1,#70c6a7);height:6px;border-radius:20px}
+.viz-marker{position:absolute;top:-11px;transform:translateX(-50%);border:3px solid white;border-radius:50%;width:28px;height:28px;background:#f3b759;transition:left .3s ease;box-shadow:0 2px 8px #0008}
+.viz-clock{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:14px 0}
+.viz-clock>div{background:#234969;border:1px solid #67b0e0;border-radius:14px;text-align:center;padding:12px;min-width:92px;font-size:32px;font-weight:900}
+.viz-clock small{display:block;font-size:13px;color:#c6d8e6}
+.viz-steps{display:flex;gap:6px;justify-content:center;margin:10px 0;flex-wrap:wrap}
+.viz-steps span{padding:8px 12px;border-radius:9px;background:#264867;font-size:16px}
+@media(max-width:560px){.viz-cell{min-height:43px}.viz-cell b{font-size:20px}.viz-cell small{font-size:10px}.experiment{padding:13px}.viz-clock>div{min-width:75px;font-size:26px}}
 </style></head>
 <body><header><div class="logo">∑ <span>HomeSchool</span></div><div class="muted">MATEMÁTICAS · 1.º ESO</div></header>
 <main class="wrap"><section class="hero"><div class="eyebrow">Curso visual e interactivo</div><h1>Aprende mates jugando con las ideas</h1>
@@ -93,7 +126,63 @@ function esc(s){return String(s).replace(/[&<>"]/g,x=>({"&":"&amp;","<":"&lt;","
 function go(l,s=0){state.lesson=Math.max(0,Math.min(9,l));state.step=Math.max(0,Math.min(3,s));save();render();window.scrollTo({top:100,behavior:"smooth"})}
 function tileGrid(n){return '<div class="tiles" style="grid-template-columns:repeat('+n+',1fr)">'+Array.from({length:n*n},()=>'<div class="tile"></div>').join("")+'</div>'}
 function slider(label,id,min,max){return '<label class="control">'+esc(label)+' <strong id="label-'+id+'"></strong><input type="range" id="input-'+id+'" min="'+min+'" max="'+max+'" value="'+controls[id]+'"></label>'}
+
+function newExperiment(n){
+ const title=['','', 'El valor escondido de cada cifra','Cancela factores con un toque','','¿Qué cuadrado cabe en este número?','','Construye la ampliación','','Un contador que trabaja en base 60'][n];
+ if(n===2)return '<div class="experiment"><h3>'+title+'</h3><p>Toca cualquier cifra. Descubre cuánto vale realmente según dónde esté.</p><div id="digitRows" class="viz-grid"></div><div id="digitReveal" class="viz-answer" aria-live="polite">Selecciona una cifra.</div><p class="microhint">Empieza por la derecha: unidades → decenas → centenas…</p></div>';
+ if(n===3)return '<div class="experiment"><h3>'+title+'</h3><p>Tenemos 2⁵ ÷ 2³. Toca «Cancelar 3 factores» para ver qué significa restar exponentes.</p><div id="factorRows" class="factor-strip"></div><button class="math-action" id="cancelFactors">Cancelar 3 factores</button><div id="factorResult" class="equation-big">2⁵ ÷ 2³ = ?</div><button id="factorReset">Repetir</button></div>';
+ if(n===5)return '<div class="experiment"><h3>'+title+'</h3>'+slider("Cantidad de baldosas","root",390,450)+'<div class="viz-numberline"><span class="viz-marker" id="rootMarker"></span></div><div class="row"><strong>400 = 20²</strong><strong>441 = 21²</strong></div><div class="viz-square" id="rootSquare"></div><div class="viz-answer" id="rootExplain"></div></div>';
+ if(n===7)return '<div class="experiment"><h3>'+title+'</h3><p>Primero mira el cuadrado original. Después añade las nuevas franjas.</p><div class="viz-area" id="areaCells"></div><div id="areaResult" class="equation-big">60 × 60 = 3.600</div><button class="math-action" id="addBorders">Añadir 2 filas y 2 columnas</button><button id="resetBorders">Reiniciar</button><p class="microhint">La cuadrícula está reducida para verla mejor: representa la misma idea con 10 → 12.</p></div>';
+ if(n===9)return '<div class="experiment"><h3>'+title+'</h3>'+slider("Segundos de ángulo","secs",0,60000)+'<div class="viz-clock"><div id="degBox"></div><span>:</span><div id="minBox"></div><span>:</span><div id="secBox"></div></div><div id="sexResult" class="viz-answer"></div><p>Un grado contiene 60 minutos. Cada minuto, 60 segundos.</p><button class="math-action" id="secPreset">Probar los 56.030″ del examen</button></div>';
+ return '';
+}
+function paintExperiment(n){
+ if(n===2){
+  const digits=[6,0,5,2,3,0,4,0];const root=document.getElementById('digitRows');if(!root)return;
+  root.innerHTML=digits.map((d,i)=>'<button class="viz-cell '+(d===0?'zero':'')+'" data-digit="'+i+'"><b>'+d+'</b><small>10^'+(7-i)+'</small></button>').join('');
+  root.querySelectorAll('[data-digit]').forEach(b=>b.onclick=()=>{
+   root.querySelectorAll('button').forEach(el=>el.classList.remove('selected'));b.classList.add('selected');
+   const i=+b.dataset.digit,d=digits[i],value=d*10**(7-i);
+   document.getElementById('digitReveal').textContent=d+' × 10^'+(7-i)+' = '+value.toLocaleString('es-ES')+(d===0?' (cero: no aporta valor)':'');
+  });
+ }
+ if(n===3){
+   let cancelled=false;const row=document.getElementById('factorRows'),out=document.getElementById('factorResult');
+   const draw=()=>{row.innerHTML=Array.from({length:5},(_,i)=>'<span class="factor '+(cancelled&&i<3?'cancelled':'')+'">2</span>').join('');out.textContent=cancelled?'Quedan 2² = 4':'2⁵ ÷ 2³ = ?'};
+   document.getElementById('cancelFactors').onclick=()=>{cancelled=true;draw()};
+   document.getElementById('factorReset').onclick=()=>{cancelled=false;draw()};draw();
+ }
+ if(n===5){
+   const x=controls.root,lo=Math.floor(Math.sqrt(x)),rest=x-lo*lo;
+   const square=document.getElementById('rootSquare');if(!square)return;
+   const count=22*22; square.innerHTML=Array.from({length:count},(_,i)=>'<span class="'+(i>=400&&i<400+rest?'extra':'')+'" style="'+(i>=400+rest?'opacity:.1':'')+'"></span>').join('');
+   const marker=document.getElementById('rootMarker');marker.style.left=(100*(x-400)/41)+'%';
+   document.getElementById('rootExplain').textContent=lo+' × '+lo+' = '+lo*lo+'; sobran '+rest+' baldosas. Raíz entera: '+lo+'.';
+ }
+ if(n===7){
+   let added=false;const grid=document.getElementById('areaCells');const result=document.getElementById('areaResult');
+   const draw=()=>{
+      grid.innerHTML=Array.from({length:144},(_,i)=>{
+       const y=Math.floor(i/12),x=i%12,extra=(x>=10||y>=10);
+       return '<span class="'+(added&&extra?(x>=10&&y>=10?'corner':'new'):'')+'" style="'+(!added&&extra?'opacity:.08':'')+';animation-delay:'+(i%12)*14+'ms"></span>';
+      }).join('');
+      result.textContent=added?'(60 + 2)² = 3.844 → 244 nuevas':'60² = 3.600';
+   };
+   document.getElementById('addBorders').onclick=()=>{added=true;draw()};
+   document.getElementById('resetBorders').onclick=()=>{added=false;draw()};draw();
+ }
+ if(n===9){
+  const x=controls.secs,d=Math.floor(x/3600),m=Math.floor(x%3600/60),s=x%60;
+  document.getElementById('degBox').innerHTML=d+'°<small>grados</small>';
+  document.getElementById('minBox').innerHTML=m+'′<small>minutos</small>';
+  document.getElementById('secBox').innerHTML=s+'″<small>segundos</small>';
+  document.getElementById('sexResult').textContent=x.toLocaleString('es-ES')+'″ = '+d+'° '+m+'′ '+s+'″';
+  document.getElementById('secPreset').onclick=()=>{controls.secs=56030;document.getElementById('input-secs').value=56030;updateVisual(9);paintExperiment(9)};
+ }
+}
+
 function visual(n){
+ if([2,3,5,7,9].includes(n))return newExperiment(n);
  if(n===0)return '<div class="controls">'+slider("Base","base",2,5)+slider("Exponente","power",1,4)+'</div><div class="visual"><div class="result" id="powerResult"></div><p id="powerFactors"></p><div id="powerBlocks"></div></div>';
  if(n===1)return slider("Fichas por lado","side",1,15)+'<div class="visual"><div id="tileOutput"></div><div class="result" id="sideResult"></div></div>';
  if(n===2)return '<div class="visual"><div class="result">60.523.040</div><p>6 × 10⁷ + 5 × 10⁵ + 2 × 10⁴ + 3 × 10³ + 4 × 10¹</p></div>';
@@ -116,11 +205,11 @@ function updateVisual(n){
  if(n===9){const sec=controls.secs;$("secondsResult").textContent=Math.floor(sec/3600)+"° "+Math.floor(sec%3600/60)+"′ "+sec%60+"″";}
 }
 function bindVisual(n){
- for(const id of ["base","power","side","root","offspring","generations","angle","secs"]){const node=$("input-"+id);if(node)node.addEventListener("input",()=>{controls[id]=+node.value;updateVisual(n)})}
+ for(const id of ["base","power","side","root","offspring","generations","angle","secs"]){const node=$("input-"+id);if(node)node.addEventListener("input",()=>{controls[id]=+node.value;updateVisual(n);paintExperiment(n)})}
  const b=$("calcBack");if(b)b.onclick=()=>{controls.calc--;updateVisual(n)};
  const f=$("calcNext");if(f)f.onclick=()=>{controls.calc++;updateVisual(n)};
  const reset=$("secondsReset");if(reset)reset.onclick=()=>{controls.secs=56030;$("input-secs").value=56030;updateVisual(n)};
- updateVisual(n)
+ updateVisual(n);paintExperiment(n)
 }
 function quiz(n){
  const l=lessons[n],selected=state.answers[n],locked=selected&&selected.checked;
