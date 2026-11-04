@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101c30"><title>HomeSchool · Laboratorio de Mates 1º ESO</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:dark;--ink:#f3f7ff;--muted:#b1c3d9;--panel:#192c46;--line:#38516f;--bright:#6bb9ff;--gold:#ffcb70}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#193759 0,#0d182b 62%);color:var(--ink);min-height:100vh}
+header,.wrap,footer{max-width:900px;margin:auto;padding:22px}header{display:flex;justify-content:space-between;align-items:center;gap:12px}.logo{font-weight:900;font-size:22px}.logo span{color:var(--gold)}
+h1{font-size:clamp(31px,5vw,56px);line-height:1.09;margin:.4em 0}h2{font-size:clamp(25px,4vw,39px);line-height:1.16;margin:10px 0 22px}p,.lead{font-size:clamp(18px,2.4vw,23px);line-height:1.55}.muted{color:var(--muted)}.eyebrow{color:var(--bright);font-size:13px;font-weight:750;letter-spacing:.12em;text-transform:uppercase}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:clamp(18px,4vw,32px);box-shadow:0 12px 35px #03091240}
+.hero{padding:20px 0 24px}.hero p{max-width:720px}.course{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:24px 0}.course button{display:block;text-align:left;min-height:115px}
+button{font:inherit;color:var(--ink);cursor:pointer;border:1px solid var(--line);background:#213853;border-radius:13px;padding:13px 18px;font-weight:700;transition:.15s}
+button:hover{border-color:var(--bright);background:#2a496c}button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+button:disabled{opacity:.4;cursor:not-allowed}.primary{background:#1679c2;border-color:#4eb6f7}.primary:hover{background:#288ed9}
+.course button.active{border:2px solid var(--bright);background:#153e64}.course strong{font-size:18px;display:block}.course small{color:var(--muted);display:block;margin-top:8px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.progress{height:10px;background:#344861;border-radius:99px;overflow:hidden;margin:12px 0 23px}.progress div{background:linear-gradient(90deg,#52a1ea,#70dbbf);height:100%;transition:width .25s}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:22px 0}.steps button{padding:12px 2px;font-size:13px}.steps .active{background:#246aa0;border-color:#7ecaff}.formula{background:#0c1d32;border:1px solid #395d7c;border-radius:17px;padding:25px 14px;text-align:center;font-weight:800;font-size:clamp(23px,4vw,36px);overflow-wrap:anywhere;margin:20px 0}
+.note{background:#243a55;border-radius:13px;padding:16px 18px;color:#dfedfa;font-size:18px;line-height:1.5}.controls{display:grid;gap:13px}.control{display:grid;gap:9px;font-size:19px}.control strong{color:var(--gold)}
+input[type=range]{width:100%;accent-color:#6bb9ff;cursor:pointer;height:28px}.tiles{display:grid;margin:auto;width:min(100%,330px);aspect-ratio:1;gap:2px}.tile{background:#58aeeb;border:1px solid #9fd6ff;border-radius:2px}
+.visual{background:#0e2238;border-radius:16px;padding:20px;text-align:center;margin:14px 0}.visual svg{max-width:100%;max-height:310px}.result{font-size:clamp(25px,4.5vw,42px);font-weight:850;color:#90d9ff;margin:10px}
+.choices{display:grid;gap:10px}.choice{text-align:left;font-size:20px;display:flex;align-items:center;gap:15px;padding:15px}.choice b{background:#355471;border-radius:8px;display:grid;place-items:center;min-width:39px;height:39px}.choice.chosen{border:2px solid var(--bright);background:#183e60}
+.answer{border-radius:14px;padding:18px;background:#29465f;margin-top:15px;font-size:19px;line-height:1.5}.answer.good{border:1px solid #60c9a3}.answer.bad{border:1px solid #ffbf82}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;border-top:1px solid var(--line);padding-top:22px}
+footer{color:var(--muted);font-size:14px;line-height:1.6}.hide{display:none!important}
+@media(max-width:560px){header,.wrap,footer{padding:15px}.course{gap:8px}.course strong{font-size:15px}.course button{min-height:100px;padding:12px}.steps button{font-size:11px}.nav button{padding:12px}}
+</style></head>
+<body><header><div class="logo">∑ <span>HomeSchool</span></div><div class="muted">MATEMÁTICAS · 1.º ESO</div></header>
+<main class="wrap"><section class="hero"><div class="eyebrow">Curso visual e interactivo</div><h1>Aprende mates jugando con las ideas</h1>
+<p class="muted">Diez lecciones basadas en el examen. Una sola idea en cada paso, experimentos que puedes modificar y preguntas con explicaciones.</p></section>
+<div class="row"><strong>Tu progreso</strong><span id="progressText">0 de 10 lecciones</span></div><div class="progress"><div id="progressBar"></div></div>
+<section class="card" aria-live="polite"><div class="row"><span class="eyebrow" id="lessonNum"></span><span class="muted" id="stepNum"></span></div>
+<h2 id="lessonTitle"></h2><div class="steps" id="steps"></div><div id="content"></div><div class="nav"><button id="back">← Anterior</button><button id="next" class="primary">Continuar →</button></div></section>
+<h2 style="margin-top:40px">Todas las lecciones</h2><div class="course" id="course"></div></main>
+<footer>HomeSchool · Contenido educativo de 1.º ESO. El avance se guarda en este navegador mediante almacenamiento local y no se sincroniza entre dispositivos.</footer>
+<script>
+"use strict";
+const lessons=[
+{title:"El secreto de las potencias",subtitle:"Ejercicio 1 · Potencias",s:[
+["Tres grupos de tres","Hay tres cajas, con tres bolsas en cada caja y tres canicas en cada bolsa.","3 × 3 × 3 = 27","Al multiplicar tres veces el mismo número, usamos una potencia."],
+["Base y exponente","La base es el número que se repite. El exponente indica cuántas veces aparece multiplicándose.","3³ = 27","3³ no significa 3 × 3 solamente ni 3 × 3 porque sea base por exponente: significa tres factores iguales a tres."],
+["Experimento","Cambia la base y el exponente y mira cuánto crece el resultado.","","El exponente cuenta factores, no unidades."],
+["Desafío","¿Cuánto es 2⁵?","2 × 2 × 2 × 2 × 2 = ?","Multiplica cinco doses."]],options:["10","32","25"],answer:1,why:"2⁵ = 2 × 2 × 2 × 2 × 2 = 32."},
+{title:"Raíces cuadradas",subtitle:"Ejercicio 2 · Raíces",s:[
+["Un suelo de baldosas","Si colocamos 25 baldosas en un cuadrado, hay cinco por fila y cinco filas.","5 × 5 = 25","El cuadrado tiene igual número de filas y columnas."],
+["El camino inverso","Si sabemos que tenemos 25 baldosas, ¿cuántas van en cada lado? Usamos una raíz cuadrada.","√25 = 5","La raíz busca el número que, multiplicado por sí mismo, produce el total."],
+["Construye tu cuadrado","Mueve el control y observa cómo se forma el cuadrado.","","Si un cuadrado tiene 12 fichas por lado, contiene 144 fichas."],
+["Desafío","¿Cuál es √144?","? × ? = 144","Busca un número que se multiplique por sí mismo."]],options:["11","12","14"],answer:1,why:"12 × 12 = 144; por eso √144 = 12."},
+{title:"El valor de cada cifra",subtitle:"Ejercicio 3 · Descomposición",s:[
+["No todos los cincos valen cinco","Un 5 puede representar cinco, cincuenta o quinientos, según su posición.","5 → 50 → 500","Cada paso hacia la izquierda multiplica su valor por 10."],
+["Las potencias de diez","Las posiciones pueden representarse con potencias de diez.","10⁰ = 1  ·  10¹ = 10  ·  10² = 100","Contamos desde la derecha y empezamos en el exponente 0."],
+["Desmontar el número","En el examen aparece el número 60.523.040.","60.000.000 + 500.000 + 20.000 + 3.000 + 40","Los ceros no aportan nada a la suma. Cada cifra no nula se multiplica por la potencia de 10 correspondiente."],
+["Desafío","¿Qué potencia representa el 7 en 7.020.000?","7 × 10? = 7.000.000","Cuenta las posiciones desde la derecha."]],options:["7 × 10⁵","7 × 10⁶","7 × 10⁷"],answer:1,why:"El 7 ocupa la posición de millones: 7 × 10⁶."},
+{title:"Reglas de las potencias",subtitle:"Ejercicio 4 · Propiedades",s:[
+["Multiplicar: juntar factores","Tres doses multiplicados por otros dos doses forman cinco doses.","2³ × 2² = 2⁵","Si la base es igual, sumamos los exponentes."],
+["Dividir: cancelar factores","Al dividir cinco factores iguales entre tres factores iguales, quedan dos.","2⁵ ÷ 2³ = 2²","Si dividimos potencias de igual base, restamos exponentes."],
+["Potencia de potencia","Cuatro grupos de dos factores de 3 son ocho factores de 3.","(3²)⁴ = 3⁸","Multiplicamos exponentes. ¡Ojo! Estas reglas no se aplican directamente a sumas y restas."],
+["Desafío","¿En qué se convierte (7²)⁴ ÷ 7⁵?","7⁸ ÷ 7⁵ = ?","Primero multiplica exponentes; después resta."]],options:["7¹³","7³","7⁸"],answer:1,why:"(7²)⁴ = 7⁸ y 7⁸ ÷ 7⁵ = 7³."},
+{title:"Operaciones combinadas",subtitle:"Ejercicio 5 · Prioridades",s:[
+["El orden es importante","Si sumamos antes de multiplicar, podemos equivocarnos.","3 + 2 × 5 = 13","Primero hacemos 2 × 5 = 10, y después sumamos 3."],
+["Cuatro niveles","Primero paréntesis; después potencias y raíces; luego multiplicaciones y divisiones; por último sumas y restas.","( ) → potencias → × ÷ → + −","Las multiplicaciones y divisiones tienen la misma prioridad: se hacen de izquierda a derecha."],
+["Resuelve el examen","Pulsa para ver cada transformación de la operación, una a una.","12 × 3 − [18 − (11 − 9)] ÷ 4","Resolvemos primero el paréntesis más interior."],
+["Desafío","Calcula 13 + 2³ × 6 ÷ √9 − 5.","13 + 8 × 6 ÷ 3 − 5","Respeta las prioridades."]],options:["24","48","16"],answer:0,why:"8 × 6 = 48; 48 ÷ 3 = 16; 13 + 16 − 5 = 24."},
+{title:"Raíces no exactas",subtitle:"Ejercicio 6 · Razonamiento",s:[
+["Entre dos cuadrados","No todas las cantidades de fichas forman cuadrados perfectos.","20² = 400  ·  21² = 441","419 queda entre 400 y 441."],
+["El resto","Con 419 fichas podemos construir un cuadrado de 20 por 20 y nos sobran 19.","419 = 20² + 19","La raíz cuadrada entera es 20 y el resto es 19."],
+["Busca cuadrados perfectos","Mueve el número y observa cuándo el resto pasa a ser cero.","","Si el resto vale cero, la raíz entera también es una raíz exacta."],
+["Desafío","Encuentra el exponente desconocido en 4ˣ = 64.","4 × 4 × 4 = 64","¿Cuántos factores 4 aparecen?"]],options:["2","3","4"],answer:1,why:"4³ = 64. El exponente es 3."},
+{title:"El árbol familiar",subtitle:"Ejercicio 7 · Generaciones",s:[
+["Primera y segunda generación","Juan tiene cuatro hijos; cada hijo tiene otros cuatro.","4 × 4 = 16 nietos","Multiplicamos porque cada hijo tiene el mismo número de descendientes."],
+["Tercera generación","Si cada uno de esos nietos tiene cuatro hijos, aparecen 64 bisnietos.","4 × 4 × 4 = 64","Tres generaciones multiplicativas se representan como 4³."],
+["Simula generaciones","Cambia el número de descendientes por persona y el número de generaciones.","","Observa lo rápido que crece el total."],
+["Desafío","Si cada persona tiene tres hijos durante tres generaciones, ¿cuántos bisnietos aparecen?","3³ = ?","Es una multiplicación de tres factores iguales."]],options:["9","18","27"],answer:2,why:"3 × 3 × 3 = 27 bisnietos."},
+{title:"Un cuadrado enorme",subtitle:"Ejercicio 8 · 3.600 fichas",s:[
+["Formar un cuadrado","Con 3.600 fichas creamos un cuadrado perfecto.","√3600 = 60","Hay 60 fichas en cada lado."],
+["Ampliarlo","Queremos dos fichas más por lado.","60 + 2 = 62","El nuevo cuadrado mide 62 por 62 fichas."],
+["¿Dónde están las nuevas?","Compara las franjas añadidas: 120 de una orientación, 120 de la otra y cuatro en la esquina.","120 + 120 + 4 = 244","También se calcula como 62² − 60²."],
+["Desafío","Ampliamos un cuadrado de 10 fichas por lado hasta uno de 12. ¿Cuántas añadimos?","12² − 10² = ?","Calcula los dos cuadrados antes de restar."]],options:["24","44","48"],answer:1,why:"12² = 144; 10² = 100; diferencia: 44."},
+{title:"Detectives de ángulos",subtitle:"Ejercicio 9 · Geometría",s:[
+["Medir giros","Una esquina recta mide 90°. Una línea recta forma 180°.","¼ vuelta = 90°","Una vuelta completa mide 360°."],
+["Relaciones entre ángulos","Los opuestos por el vértice son iguales. Los complementarios suman 90° y los suplementarios, 180°.","A + B = 180°","Si conocemos uno, podemos calcular los demás."],
+["Gira la línea","Mueve el ángulo y observa cómo cambian las medidas.","","Los ángulos opuestos por el vértice son iguales."],
+["Desafío","Si un ángulo mide 27°, ¿cuánto mide su suplementario?","180° − 27° = ?","Los suplementarios suman una línea recta."]],options:["63°","153°","27°"],answer:1,why:"180° − 27° = 153°."},
+{title:"Grados, minutos y segundos",subtitle:"Ejercicio 10 · Sexagesimal",s:[
+["Contamos de sesenta en sesenta","Los ángulos se dividen en grados, minutos y segundos.","1° = 60′  ·  1′ = 60″","Un grado equivale a 3.600 segundos de ángulo."],
+["Convertir unidades","Para pasar segundos a minutos dividimos por 60; para pasar minutos a grados dividimos otra vez.","56.030″ = 15° 33′ 50″","El resto de cada división pasa a la unidad pequeña."],
+["Conversor interactivo","Mueve el control y observa la equivalencia entre segundos, minutos y grados.","","Para pasar grados a segundos multiplicamos por 3.600."],
+["Desafío","¿Cuál es el suplementario de 34° 23′ 12″?","180° − 34° 23′ 12″","Pide prestado un grado y después un minuto."]],options:["145° 36′ 48″","146° 37′ 48″","145° 37′ 12″"],answer:0,why:"180° = 179° 59′ 60″; restando resulta 145° 36′ 48″."}
+];
+const $=id=>document.getElementById(id);
+let state;try{state=JSON.parse(localStorage.getItem("hs-mates-v1"))||{}}catch{state={}}
+state.finished=state.finished||[];state.answers=state.answers||{};state.lesson=Number.isInteger(state.lesson)?state.lesson:0;state.step=Number.isInteger(state.step)?state.step:0;
+let controls={base:3,power:3,side:5,root:419,offspring:4,generations:3,angle:27,secs:56030,calc:0};
+function save(){try{localStorage.setItem("hs-mates-v1",JSON.stringify(state))}catch{}}
+function esc(s){return String(s).replace(/[&<>"]/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[x]))}
+function go(l,s=0){state.lesson=Math.max(0,Math.min(9,l));state.step=Math.max(0,Math.min(3,s));save();render();window.scrollTo({top:100,behavior:"smooth"})}
+function tileGrid(n){return '<div class="tiles" style="grid-template-columns:repeat('+n+',1fr)">'+Array.from({length:n*n},()=>'<div class="tile"></div>').join("")+'</div>'}
+function slider(label,id,min,max){return '<label class="control">'+esc(label)+' <strong id="label-'+id+'"></strong><input type="range" id="input-'+id+'" min="'+min+'" max="'+max+'" value="'+controls[id]+'"></label>'}
+function visual(n){
+ if(n===0)return '<div class="controls">'+slider("Base","base",2,5)+slider("Exponente","power",1,4)+'</div><div class="visual"><div class="result" id="powerResult"></div><p id="powerFactors"></p><div id="powerBlocks"></div></div>';
+ if(n===1)return slider("Fichas por lado","side",1,15)+'<div class="visual"><div id="tileOutput"></div><div class="result" id="sideResult"></div></div>';
+ if(n===2)return '<div class="visual"><div class="result">60.523.040</div><p>6 × 10⁷ + 5 × 10⁵ + 2 × 10⁴ + 3 × 10³ + 4 × 10¹</p></div>';
+ if(n===3)return '<div class="visual"><div class="result">2³ × 2² = 2⁵</div><p>🔵 🔵 🔵 × 🟡 🟡</p><div class="result">2⁵ ÷ 2³ = 2²</div><p>Dividir quita factores iguales.</p></div>';
+ if(n===4)return '<div class="visual"><div class="eyebrow" id="calcNum"></div><div class="result" id="calcFormula"></div><p id="calcDesc"></p><div class="row"><button id="calcBack">← Atrás</button><button id="calcNext">Siguiente cálculo →</button></div></div>';
+ if(n===5)return slider("Número de baldosas","root",390,450)+'<div class="visual"><div class="result" id="rootResult"></div><p id="rootDetail"></p></div>';
+ if(n===6)return slider("Descendientes por persona","offspring",2,5)+slider("Generaciones","generations",1,4)+'<div class="visual"><div class="result" id="familyResult"></div><div id="familyDots"></div></div>';
+ if(n===7)return '<div class="visual"><svg viewBox="0 0 300 230"><rect x="18" y="8" width="190" height="190" fill="#4a99d0"/><rect x="208" y="8" width="38" height="190" fill="#f0b55c"/><rect x="18" y="198" width="190" height="29" fill="#f0b55c"/><rect x="208" y="198" width="38" height="29" fill="#5db69c"/><text x="113" y="110" font-size="18" text-anchor="middle" fill="white">60 × 60</text><text x="226" y="110" font-size="13" text-anchor="middle" fill="#152235">120</text><text x="113" y="217" font-size="13" text-anchor="middle" fill="#152235">120</text><text x="227" y="217" font-size="13" text-anchor="middle" fill="#152235">4</text></svg><div class="result">120 + 120 + 4 = 244</div></div>';
+ if(n===8)return slider("Ángulo A (grados)","angle",10,80)+'<div class="visual"><svg id="angleSvg" viewBox="0 0 320 215"></svg><div class="result" id="angleResult"></div></div>';
+ return slider("Segundos de ángulo","secs",0,60000)+'<div class="visual"><div class="result" id="secondsResult"></div><button id="secondsReset">Usar 56.030″ del examen</button></div>';
+}
+function updateVisual(n){
+ for(const k in controls){const lab=$("label-"+k);if(lab)lab.textContent=controls[k];}
+ if(n===0){const {base:b,power:p}=controls;$("powerResult").textContent=b+"^"+p+" = "+b**p;$("powerFactors").textContent=Array(p).fill(b).join(" × ")+" = "+b**p;const count=b**p;$("powerBlocks").innerHTML='<div style="display:grid;grid-template-columns:repeat(25,1fr);gap:2px;max-width:400px;margin:auto">'+Array.from({length:count},(_,i)=>'<div style="height:5px;border-radius:2px;background:'+["#449adb","#6ac4a1","#f2c06a"][Math.floor(i/25)%3]+'"></div>').join("")+'</div>';}
+ if(n===1){$("tileOutput").innerHTML=tileGrid(controls.side);$("sideResult").textContent="√"+(controls.side**2)+" = "+controls.side;}
+ if(n===4){const a=["12 × 3 − [18 − (11 − 9)] ÷ 4","12 × 3 − [18 − 2] ÷ 4","12 × 3 − 16 ÷ 4","36 − 4","32"];const d=["Empezamos por el paréntesis interior.","11 − 9 = 2","18 − 2 = 16","Calculamos multiplicación y división.","Resultado final."];$("calcNum").textContent="PASO "+(controls.calc+1)+" DE 5";$("calcFormula").textContent=a[controls.calc];$("calcDesc").textContent=d[controls.calc];$("calcBack").disabled=controls.calc===0;$("calcNext").disabled=controls.calc===4;}
+ if(n===5){const r=Math.floor(Math.sqrt(controls.root));$("rootResult").textContent="Raíz entera: "+r+" · Resto: "+(controls.root-r*r);$("rootDetail").textContent=controls.root+" = "+r+"² + "+(controls.root-r*r);}
+ if(n===6){const total=controls.offspring**controls.generations;$("familyResult").textContent=controls.offspring+"^"+controls.generations+" = "+total;$("familyDots").innerHTML='<div style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap">'+Array.from({length:Math.min(total,120)},()=>'<span style="width:7px;height:7px;background:#76c5a7;border-radius:50%"></span>').join("")+'</div>';}
+ if(n===8){const a=controls.angle,r=a*Math.PI/180,c=Math.cos(r),s=Math.sin(r);$("angleSvg").innerHTML='<path d="M12 106 H308" stroke="#dfeeff" stroke-width="2.6"/><path d="M'+(160-130*c)+' '+(106+130*s)+' L'+(160+130*c)+' '+(106-130*s)+'" stroke="#65b7f4" stroke-width="3"/><text x="223" y="86" fill="#74c6ff" font-size="18">'+a+'°</text><text x="56" y="138" fill="#73d7b0" font-size="18">'+a+'°</text><text x="93" y="72" fill="#ffc670" font-size="18">'+(180-a)+'°</text><text x="207" y="166" fill="#ffc670" font-size="18">'+(180-a)+'°</text>';$("angleResult").textContent="Suplementario: "+(180-a)+"° · Complementario: "+(90-a)+"°";}
+ if(n===9){const sec=controls.secs;$("secondsResult").textContent=Math.floor(sec/3600)+"° "+Math.floor(sec%3600/60)+"′ "+sec%60+"″";}
+}
+function bindVisual(n){
+ for(const id of ["base","power","side","root","offspring","generations","angle","secs"]){const node=$("input-"+id);if(node)node.addEventListener("input",()=>{controls[id]=+node.value;updateVisual(n)})}
+ const b=$("calcBack");if(b)b.onclick=()=>{controls.calc--;updateVisual(n)};
+ const f=$("calcNext");if(f)f.onclick=()=>{controls.calc++;updateVisual(n)};
+ const reset=$("secondsReset");if(reset)reset.onclick=()=>{controls.secs=56030;$("input-secs").value=56030;updateVisual(n)};
+ updateVisual(n)
+}
+function quiz(n){
+ const l=lessons[n],selected=state.answers[n],locked=selected&&selected.checked;
+ return '<div class="choices">'+l.options.map((x,i)=>'<button class="choice '+(selected&&selected.pick===i?"chosen":"")+'" data-pick="'+i+'" '+(locked?"disabled":"")+'><b>'+String.fromCharCode(65+i)+'</b>'+esc(x)+'</button>').join("")+'</div>'+
+ (locked?'<div class="answer '+(selected.pick===l.answer?"good":"bad")+'"><strong>'+(selected.pick===l.answer?"¡Correcto!":"Vamos a comprobarlo")+'</strong><p>'+esc(l.why)+'</p>'+(selected.pick!==l.answer?'<button id="retry">Intentar de nuevo</button>':"")+'</div>':'<button class="primary" id="check" '+(!selected?"disabled":"")+' style="width:100%;margin-top:15px">Comprobar respuesta</button>');
+}
+function render(){
+ const n=state.lesson,st=state.step,l=lessons[n],s=l.s[st];$("lessonNum").textContent="LECCIÓN "+(n+1)+" / 10";$("stepNum").textContent="PASO "+(st+1)+" / 4";$("lessonTitle").textContent=l.title;
+ $("steps").innerHTML=["Descubre","Aprende","Explora","Practica"].map((x,i)=>'<button class="'+(i===st?"active":"")+'" data-step="'+i+'">'+x+'</button>').join("");
+ $("content").innerHTML='<div class="eyebrow">'+esc(l.subtitle)+'</div><h2>'+esc(s[0])+'</h2><p class="lead">'+esc(s[1])+'</p>'+(st===2?visual(n):(s[2]?'<div class="formula">'+esc(s[2])+'</div>':""))+(st===3?quiz(n):'<div class="note">'+esc(s[3])+'</div>');
+ $("back").disabled=n===0&&st===0;$("next").textContent=st===3?"Siguiente lección →":"Continuar →";if(n===9&&st===3)$("next").textContent="Volver al principio ↻";
+ $("progressText").textContent=state.finished.length+" de 10 lecciones completadas";$("progressBar").style.width=(state.finished.length*10)+"%";
+ $("course").innerHTML=lessons.map((x,i)=>'<button class="'+(i===n?"active":"")+'" data-lesson="'+i+'"><small>LECCIÓN '+(i+1)+(state.finished.includes(i)?" · COMPLETADA ✓":"")+'</small><strong>'+esc(x.title)+'</strong></button>').join("");
+ document.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>go(n,+b.dataset.step));
+ document.querySelectorAll("[data-lesson]").forEach(b=>b.onclick=()=>go(+b.dataset.lesson));
+ if(st===2)bindVisual(n);
+ if(st===3){
+  document.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{state.answers[n]={pick:+b.dataset.pick,checked:false};save();render()});
+  const c=$("check");if(c)c.onclick=()=>{const a=state.answers[n];if(!a)return;a.checked=true;if(a.pick===l.answer&&!state.finished.includes(n))state.finished.push(n);save();render()};
+  const r=$("retry");if(r)r.onclick=()=>{delete state.answers[n];save();render()};
+ }
+}
+$("back").onclick=()=>state.step>0?go(state.lesson,state.step-1):go(state.lesson-1,3);
+$("next").onclick=()=>state.step<3?go(state.lesson,state.step+1):go(state.lesson===9?0:state.lesson+1,0);
+render();
+</script></body></html>
