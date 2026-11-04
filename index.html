@@ -130,7 +130,7 @@ options:['145° 36′ 48″','145° 37′ 12″','146° 36′ 48″'],answer:0,w
 const $=id=>document.getElementById(id);
 const saved=(()=>{try{return JSON.parse(localStorage.getItem('homeschool-v3')||'{}')}catch(e){return {}}})();
 const state={lesson:Math.max(0,Math.min(9,saved.lesson||0)),stage:Math.max(0,Math.min(4,saved.stage||0)),done:saved.done||[],choice:{},checked:{}};
-const exp={powerBase:3,powerDepth:1,powerGuess:'',side:5,house:0,houseOn:Array(8).fill(true),houseShift:0,cancel:0,calc:0,root:419,gen:0,branch:4,area:0,angle:27,seconds:59,borrow:false};
+const exp={powerBase:3,powerDepth:1,powerGuess:'',side:5,house:0,houseOn:Array(8).fill(true),houseShift:0,cancel:0,calc:0,root:419,gen:0,branch:4,area:0,angle:27,seconds:59,borrowStep:0};
 function save(){try{localStorage.setItem('homeschool-v3',JSON.stringify({lesson:state.lesson,stage:state.stage,done:state.done}))}catch(e){}}
 function esc(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function format(x){return Number(x).toLocaleString('es-ES')}
@@ -158,12 +158,13 @@ function scene(n){
  if(n===2){
    const digits=[6,0,5,2,3,0,4,0],labels=['10 millones','1 millón','100 mil','10 mil','1 mil','100','10','1'];
    const total=digits.reduce((a,d,i)=>a+(exp.houseOn[i]?d*10**(7-i):0),0);
-   const val=digits[exp.house]*10**Math.max(0,Math.min(7,7-exp.house+exp.houseShift));
-   const houses='<div class="houses">'+digits.map((d,i)=>'<button class="house '+(exp.house===i?'active ':'')+(d===0?'zero':'')+'" data-house="'+i+'"><small>'+labels[i]+'</small><b>'+d+'</b></button>').join('')+'</div>';
+   const dest=Math.max(0,Math.min(7,exp.house-exp.houseShift));
+   const val=digits[exp.house]*10**(7-dest);
+   const houses='<div class="houses">'+digits.map((d,i)=>'<button class="house '+((exp.house===i||dest===i)?'active ':'')+(d===0?'zero':'')+'" data-house="'+i+'"><small>'+labels[i]+'</small><b>'+d+'</b></button>').join('')+'</div>';
    const blocks=digits[exp.house]===0?'<p class="result">Esta casa está vacía</p>':groups(digits[exp.house],'▣',10);
    return '<div class="scene-title">La calle de las cifras</div><p>¡Toca una casa! Cada cifra tiene un valor distinto según dónde vive.</p>'+
    houses+'<div class="prompt">Casa seleccionada: <strong>'+labels[exp.house]+'</strong>. Contiene '+digits[exp.house]+' '+(digits[exp.house]===1?'grupo':'grupos')+'.</div>'+
-   blocks+'<div class="result">'+format(val)+'</div>'+
+   blocks+(exp.houseShift!==0?'<div class="prompt">Has llevado el '+digits[exp.house]+' desde «'+labels[exp.house]+'» hasta «'+labels[dest]+'».</div>':'')+'<div class="result">'+format(val)+'</div>'+
    (stage>=1?'<div class="actionbar">'+button(exp.houseOn[exp.house]?'Apagar esta casa':'Encender esta casa','toggleHouse')+button('Mover una casa a la izquierda','moveLeft')+button('Mover una casa a la derecha','moveRight')+'</div><p class="mini">Total de las casas encendidas: <strong>'+format(total)+'</strong></p>':'')+
    (stage>=3?'<div class="prompt">Aportes: 60.000.000 + 500.000 + 20.000 + 3.000 + 40. Los ceros mantienen el lugar de las otras cifras.</div>':'');
  }
@@ -183,6 +184,7 @@ function scene(n){
    '<div class="equation">'+forms[exp.calc]+'</div>'+
    '<div class="prompt">'+names[exp.calc]+'</div>'+
    '<div class="actionbar">'+button('← Deshacer paso','calcBack')+button('Resolver siguiente paso →','calcNext','class="primary"')+'</div>'+
+   (exp.calc<4?'<div class="actionbar">'+button('Resolver la resta final ahora','calcWrong')+'</div><p id="calcHint" class="mini">¿La resta final ya tiene prioridad?</p>':'')+
    '<p class="mini">Paso '+(exp.calc+1)+' de 5. En cada paso solo cambia lo que hemos calculado.</p>';
  }
  if(n===5){
@@ -244,7 +246,10 @@ function scene(n){
     return '<div class="scene-title">Tres ruedas conectadas</div><p>Pulsa los botones para hacer avanzar el contador. Cada 60 segundos aparece un minuto.</p>'+
     '<div class="counter"><div class="dial"><strong>'+d+'</strong><small>GRADOS</small></div><div class="dial"><strong>'+m+'</strong><small>MINUTOS</small></div><div class="dial"><strong>'+s+'</strong><small>SEGUNDOS</small></div></div>'+
     '<div class="actionbar">'+button('+1 segundo','sec1')+button('+10 segundos','sec10')+button('+1 minuto','sec60')+button('Reiniciar','secReset')+'</div>'+
-    (stage>=2?'<div class="prompt">Préstamo visual: si nos faltan segundos, convertimos 1 minuto en 60 segundos. Si faltan minutos, convertimos 1 grado en 60 minutos.</div>':'')+
+    (stage>=2?'<div class="prompt">Para restar 34° 23′ 12″ a 180°, necesitamos prestar unidades.</div>'+
+       '<div class="counter"><div class="dial"><strong>'+[180,179,179][exp.borrowStep]+'</strong><small>GRADOS</small></div><div class="dial"><strong>'+[0,60,59][exp.borrowStep]+'</strong><small>MINUTOS</small></div><div class="dial"><strong>'+[0,0,60][exp.borrowStep]+'</strong><small>SEGUNDOS</small></div></div>'+
+       '<div class="actionbar">'+button('Convertir una unidad','borrowNext','class="primary"')+button('Reiniciar préstamos','borrowReset')+'</div>'+
+       (exp.borrowStep===2?'<div class="feedback">Ya podemos restar por columnas: 179° 59′ 60″ − 34° 23′ 12″ = 145° 36′ 48″.</div>':''):'')+
     (stage>=3?'<div class="equation">1° = 60′ = 3.600″</div>':'');
  }
  return '';
@@ -306,6 +311,7 @@ function bindScene(n){
   $('calcBack').disabled=exp.calc===0;$('calcNext').disabled=exp.calc===4;
   $('calcBack').onclick=()=>{exp.calc=Math.max(0,exp.calc-1);re()};
   $('calcNext').onclick=()=>{exp.calc=Math.min(4,exp.calc+1);re()};
+  if($('calcWrong'))$('calcWrong').onclick=()=>{$('calcHint').textContent='Todavía hay operaciones de mayor prioridad. Resolvamos primero esas partes.'};
  }
  if(n===5){$('root').oninput=e=>{exp.root=+e.target.value;re()}}
  if(n===6){
@@ -347,6 +353,8 @@ function bindScene(n){
   $('sec10').onclick=()=>{exp.seconds+=10;re()};
   $('sec60').onclick=()=>{exp.seconds+=60;re()};
   $('secReset').onclick=()=>{exp.seconds=59;re()};
+  if($('borrowNext'))$('borrowNext').onclick=()=>{exp.borrowStep=Math.min(2,exp.borrowStep+1);re()};
+  if($('borrowReset'))$('borrowReset').onclick=()=>{exp.borrowStep=0;re()};
  }
 }
 
