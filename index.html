@@ -70,7 +70,7 @@ h1{font-size:clamp(30px,5vw,56px);line-height:1.08;margin:12px 0}h2{font-size:cl
 .dec-scale-note{text-align:center;font-size:14px;color:#aecde4;margin:0 0 12px}
 .dec-delta{text-align:center;font-size:clamp(18px,2.7vw,26px);font-weight:800;color:#ffd282;background:#263f57;border-radius:11px;padding:10px}
 @media(max-width:650px){.dec-segments{grid-template-columns:repeat(2,minmax(0,1fr))}.dec-segment:last-child{grid-column:1/-1}.dec-segment{min-height:85px}}
-</style></head>
+.power-history{display:flex;justify-content:center;gap:8px;align-items:center;flex-wrap:wrap;margin:18px 0}.power-step{padding:10px 14px;border:1px solid #6eafdb;background:#204a69;font-size:25px;font-weight:850;border-radius:10px}.power-step.current{border:2px solid #f6c56c;background:#2376ac}.power-arrow{color:#c7e2f1;font-size:24px}.power-grow{animation:powerIn .4s ease both}@keyframes powerIn{from{opacity:.1;transform:scale(.78)}to{opacity:1;transform:scale(1)}}</style></head>
 <body><header><div class="logo">∑ <span>HomeSchool 3.0</span></div><div class="small">MATEMÁTICAS · 1.º ESO</div></header>
 <main class="wrap">
 <section class="hero"><div class="eyebrow">Laboratorio de pensamiento visual</div><h1>Primero lo ves.<br>Después lo entiendes.</h1>
@@ -86,10 +86,10 @@ h1{font-size:clamp(30px,5vw,56px);line-height:1.08;margin:12px 0}h2{font-size:cl
 'use strict';
 const lessons=[
 {title:'La máquina de multiplicar',topic:'Potencias',stages:[
-['Observa','Una máquina crea grupos','Pulsa «Multiplicar otra vez» y observa cómo crece la cantidad.'],
-['Experimenta','¿Qué pasa si cambiamos la máquina?','Prueba distintas cantidades por grupo. ¿Aumenta siempre lo mismo?'],
+['Observa','De una unidad a muchas','Empezamos con 1. Cada pulsación multiplica el resultado anterior.'],
+['Experimenta','Avanza y retrocede','Cambia el multiplicador y observa cada transformación.'],
 ['Predice','Adivina antes de ejecutar','Piensa cuántos objetos habrá tras el siguiente paso.'],
-['Comprende','Hemos repetido una multiplicación','Una base indica cuántos hay en cada grupo. El exponente cuenta las veces que multiplicamos.'],
+['Comprende','Cuenta cada multiplicación','El exponente cuenta cuántas multiplicaciones hemos hecho partiendo de una unidad.'],
 ['Escribe','Las potencias del examen','Ya puedes escribir la idea usando una base y un exponente.']],
 options:['7 × 3 = 21','7³ = 343','7 + 7 + 7 = 21'],answer:1,why:'7³ representa tres factores de 7: 7 × 7 × 7 = 343.'},
 {title:'El constructor de cuadrados',topic:'Raíces cuadradas',stages:[
@@ -159,17 +159,13 @@ options:['145° 36′ 48″','145° 37′ 12″','146° 36′ 48″'],answer:0,w
 const $=id=>document.getElementById(id);
 const saved=(()=>{try{return JSON.parse(localStorage.getItem('homeschool-v3')||'{}')}catch(e){return {}}})();
 const state={lesson:Math.max(0,Math.min(9,saved.lesson||0)),stage:Math.max(0,Math.min(4,saved.stage||0)),done:saved.done||[],choice:{},checked:{}};
-const exp={powerBase:3,powerDepth:1,powerGuess:'',side:5,house:0,houseOn:Array(8).fill(true),houseShift:0,cancel:0,calc:0,root:419,gen:0,branch:4,area:0,angle:27,seconds:59,borrowStep:0};
+const exp={powerBase:3,powerDepth:0,powerGuess:'',side:5,house:0,houseOn:Array(8).fill(true),houseShift:0,cancel:0,calc:0,root:419,gen:0,branch:4,area:0,angle:27,seconds:59,borrowStep:0};
 function save(){try{localStorage.setItem('homeschool-v3',JSON.stringify({lesson:state.lesson,stage:state.stage,done:state.done}))}catch(e){}}
 function esc(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function format(x){return Number(x).toLocaleString('es-ES')}
 function button(label,id,extra){return '<button id="'+id+'" '+(extra||'')+'>'+label+'</button>'}
 function controls(label,id,min,max,val){return '<div class="sliders"><label for="'+id+'">'+label+' <span class="value" id="v-'+id+'">'+val+'</span></label><input id="'+id+'" type="range" min="'+min+'" max="'+max+'" value="'+val+'"></div>'}
-function powerModel(base,depth){
- const packs=base**Math.max(0,depth-1),shown=Math.min(18,packs);
- return '<div class="groupfield">'+Array.from({length:shown},(_,i)=>'<div class="groupbox">'+Array.from({length:base},()=>'<span class="dot"></span>').join('')+'<small>grupo '+(i+1)+'</small></div>').join('')+
- (packs>shown?'<div class="groupplus">+ '+format(packs-shown)+' grupos iguales</div>':'')+'</div>';
-}
+function powerModel(b,d){if(!d)return '<div class="groupfield"><div class="groupbox"><span class="dot"></span><small>1 unidad inicial</small></div></div>';const n=b**(d-1),k=Math.min(30,n);return '<div class="groupfield">'+Array.from({length:k},(_,i)=>'<div class="groupbox power-grow">'+Array.from({length:b},()=>'<span class="dot"></span>').join('')+'<small>grupo '+(i+1)+'</small></div>').join('')+(n>k?'<div class="groupplus">+ '+format(n-k)+' grupos</div>':'')+'</div>'}
 function groups(count,base,max){const dots=Math.min(count,max||180);return '<div class="chips">'+Array.from({length:dots},(_,i)=>'<span class="chip" style="animation:appear .2s ease">'+base+'</span>').join('')+(count>dots?'<span class="tag">y '+format(count-dots)+' más</span>':'')+'</div>'}
 function grid(n,stylefn){return '<div class="tilegrid" style="grid-template-columns:repeat('+n+',1fr)">'+Array.from({length:n*n},(_,i)=>'<span class="tile '+(stylefn?stylefn(i,n):'')+'"></span>').join('')+'</div>'}
 
@@ -256,14 +252,7 @@ function bindDecimal(){
 function scene(n){
  const stage=state.stage;
  if(stage===4)return finalScene(n);
- if(n===0){
-  const count=exp.powerBase**exp.powerDepth;return '<div class="scene-title">Máquina de grupos</div><p>Después de cada pulsación, cada unidad se transforma en '+exp.powerBase+'.</p>'+
-   controls('Objetos por grupo','bpow',2,5,exp.powerBase)+
-   '<div class="result">'+format(count)+' unidades</div>'+powerModel(exp.powerBase,exp.powerDepth)+
-   '<div class="actionbar">'+button('Multiplicar otra vez','powMore','class="primary"')+button('Volver al principio','powReset')+'</div>'+
-   '<div class="prompt">Has repetido el crecimiento '+exp.powerDepth+' '+(exp.powerDepth===1?'vez':'veces')+'. ¿Qué pasará en el siguiente paso?</div>'+
-   (stage===3?'<div class="equation">'+exp.powerBase+'<sup>'+exp.powerDepth+'</sup> = '+count+'</div>':'');
- }
+ if(n===0){const b=exp.powerBase,d=exp.powerDepth,count=b**d;const chain=Array.from({length:d+1},(_,i)=>'<span class="power-step '+(i===d?'current':'')+'">'+format(b**i)+'</span>').join('<span class="power-arrow">→</span>');return '<div class="scene-title">De una unidad a muchas</div><p>Empezamos con una sola unidad. Cada pulsación multiplica por '+b+'.</p>'+controls('Multiplicar por','bpow',2,5,b)+'<div class="power-history">'+chain+'</div><div class="result">'+format(count)+' unidades</div>'+powerModel(b,d)+'<div class="actionbar">'+button('← Deshacer','powBack',d===0?'disabled':'')+button('Multiplicar por '+b,'powMore','class="primary" '+(d>=5?'disabled':''))+button('Empezar con 1','powReset')+'</div><div class="prompt">'+(d===0?'Todavía no hemos multiplicado. ¿Qué ocurrirá al pulsar?':'Hemos multiplicado '+d+' '+(d===1?'vez':'veces')+'. Último paso: '+format(b**(d-1))+' → '+format(count)+'.')+'</div>';}
  if(n===1){
    const nside=exp.side;return '<div class="scene-title">Construye el suelo</div><p>El cuadrado tiene '+nside+' baldosas a cada lado.</p>'+
    controls('Baldosas en cada lado','side',1,15,nside)+grid(nside)+
@@ -393,11 +382,7 @@ function bindScene(n){
    if($('retry'))$('retry').onclick=()=>{delete state.checked[n];delete state.choice[n];re()};
    return;
  }
- if(n===0){
-  $('bpow').oninput=e=>{exp.powerBase=+e.target.value;exp.powerDepth=1;re()};
-  $('powMore').onclick=()=>{exp.powerDepth=Math.min(exp.powerDepth+1,5);re()};
-  $('powReset').onclick=()=>{exp.powerDepth=1;re()};
- }
+ if(n===0){$('bpow').oninput=e=>{exp.powerBase=+e.target.value;exp.powerDepth=0;re()};$('powMore').onclick=()=>{exp.powerDepth=Math.min(exp.powerDepth+1,5);re()};$('powBack').onclick=()=>{exp.powerDepth=Math.max(0,exp.powerDepth-1);re()};$('powReset').onclick=()=>{exp.powerDepth=0;re()};}
  if(n===1){$('side').oninput=e=>{exp.side=+e.target.value;re()}}
  if(n===2){bindDecimal();}
  if(n===3){
