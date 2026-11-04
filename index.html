@@ -349,7 +349,29 @@ function bindScene(n){
   $('secReset').onclick=()=>{exp.seconds=59;re()};
  }
 }
-function renderScene(){const n=state.lesson;$('scene').innerHTML=scene(n);bindScene(n)}
+
+const predictionChoice={};
+function prediction(n){
+ const b=exp.powerBase,p=exp.powerDepth,side=exp.side,root=Math.floor(Math.sqrt(exp.root)),rest=exp.root-root*root;
+ const pred=[
+ {q:'La máquina tiene '+format(b**p)+' objetos. Si multiplicamos otra vez por '+b+', ¿cuántos habrá?',o:[format(b**p+b),format(b**(p+1)),format(b**p*2)],a:1,why:'Cada paso multiplica por '+b+'. El siguiente total será '+format(b**(p+1))+'.'},
+ {q:'Si el lado pasa de '+side+' a '+(side+1)+' baldosas, ¿cuántas habrá en total?',o:[format(side*side+1),format((side+1)*(side+1)),format(side*side+side)],a:1,why:'El nuevo cuadrado tiene '+(side+1)+' filas y '+(side+1)+' columnas: '+format((side+1)**2)+' fichas.'},
+ {q:'Si una cifra pasa a la casa que tiene a su derecha, su valor…',o:['se divide entre diez','se multiplica por diez','no cambia'],a:0,why:'Cada casa hacia la derecha vale diez veces menos; la cifra es la misma pero cambia su valor.'},
+ {q:'Si cancelamos tres factores de una cadena de cinco, ¿cuántos sobreviven?',o:['Ocho','Tres','Dos'],a:2,why:'Cancelamos tres parejas iguales; quedan dos factores en la cadena superior.'},
+ {q:'Si tenemos 12 × 3 − 16 ÷ 4, antes de restar debemos…',o:['resolver los productos y cocientes','hacer primero la resta','sumar todos los números'],a:0,why:'Los productos y cocientes tienen más prioridad que las sumas y las restas.'},
+ {q:'Con 419 fichas, ¿cuántas faltan para completar el cuadrado siguiente (21 × 21)?',o:['19','22','21'],a:1,why:'21 × 21 = 441 y 441 − 419 = 22.'},
+ {q:'Si cada rama crea '+exp.branch+' ramas nuevas, ¿cómo crece el total?',o:['sumando uno cada vez','multiplicando por '+exp.branch,'restando '+exp.branch],a:1,why:'Cada rama genera '+exp.branch+' descendientes, así que el total se multiplica en cada generación.'},
+ {q:'Al añadir dos filas y dos columnas, ¿qué pasa en la esquina donde se cruzan?',o:['aparece un bloque de 2 × 2','no hace falta ninguna pieza','aparece solo una ficha'],a:0,why:'Las dos filas y las dos columnas dejan una esquina de 2 × 2 = 4 fichas.'},
+ {q:'Si giramos la recta, los ángulos enfrentados…',o:['siempre suman 90°','siguen teniendo la misma medida','siempre miden 180°'],a:1,why:'Los ángulos opuestos por el vértice siguen siendo iguales, aunque cambie su medida.'},
+ {q:'El contador muestra 0 grados, 0 minutos y 59 segundos. ¿Qué ocurre al sumar 1 segundo?',o:['marca 0 minutos y 60 segundos','marca 1 minuto y 0 segundos','marca 1 grado y 0 segundos'],a:1,why:'Al llegar a 60 segundos, se cambian por un minuto completo.'}
+ ][n];
+ const picked=predictionChoice[n],solved=picked!==undefined;
+ return '<div class="prompt"><strong>Haz una predicción</strong><p class="mini">'+pred.q+'</p>'+
+ '<div class="choices">'+pred.o.map((o,i)=>'<button class="choice '+(picked===i?'active':'')+'" data-predict="'+i+'"><b>'+['A','B','C'][i]+'</b>'+esc(o)+'</button>').join('')+'</div>'+
+ (solved?'<div class="feedback '+(picked===pred.a?'':'bad')+'">'+(picked===pred.a?'¡Buena predicción! ':'Todavía puedes comprobarlo. ')+pred.why+'</div>':'')+'</div>';
+}
+
+function renderScene(){const n=state.lesson;$('scene').innerHTML=scene(n)+(state.stage===2?prediction(n):'');bindScene(n);if(state.stage===2)document.querySelectorAll('[data-predict]').forEach(el=>el.onclick=()=>{predictionChoice[n]=+el.dataset.predict;renderScene()})}
 function go(n,stage){
  state.lesson=Math.max(0,Math.min(9,n));state.stage=Math.max(0,Math.min(4,stage));save();render();
  window.scrollTo({top:0,behavior:'smooth'});
