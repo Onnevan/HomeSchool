@@ -9,6 +9,7 @@ button,input{font:inherit}button{cursor:pointer;background:#284763;color:var(--i
 button:hover{background:#315878}button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:3px}button:disabled{opacity:.35;cursor:not-allowed}
 button.primary{background:#167bbd;border-color:#80d1ff}button.secondary{background:#203954}
 header,.wrap,footer{max-width:1060px;margin:auto;padding:20px}header{display:flex;justify-content:space-between;align-items:center;gap:15px}.logo{font-size:22px;font-weight:900}.logo span{color:var(--gold)}.small{font-size:14px;color:var(--muted)}
+.homework-link{display:inline-block;background:#20537a;color:#f2f7ff;border:1px solid #80b9df;border-radius:13px;padding:10px 15px;text-decoration:none;font-weight:750}.homework-link:hover{background:#2c648d}.homework-link:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 h1{font-size:clamp(30px,5vw,56px);line-height:1.08;margin:12px 0}h2{font-size:clamp(26px,3.8vw,40px);line-height:1.16;margin:4px 0 12px}h3{font-size:clamp(20px,3vw,27px);margin:10px 0 15px}p{line-height:1.55;font-size:clamp(17px,2vw,21px)}.eyebrow{color:var(--blue);font-size:13px;font-weight:850;letter-spacing:.12em;text-transform:uppercase}
 .hero{padding:10px 0 24px}.hero p{color:var(--muted);max-width:700px}
 .progress{height:10px;border-radius:20px;background:#29435f;overflow:hidden;margin:10px 0 22px}.progress>div{height:100%;background:linear-gradient(90deg,#61a7eb,#67d5ab);transition:width .3s}
@@ -74,7 +75,7 @@ h1{font-size:clamp(30px,5vw,56px);line-height:1.08;margin:12px 0}h2{font-size:cl
 <body><header><div class="logo">∑ <span>HomeSchool 3.0</span></div><div class="small">MATEMÁTICAS · 1.º ESO</div></header>
 <main class="wrap">
 <section class="hero"><div class="eyebrow">Laboratorio de pensamiento visual</div><h1>Primero lo ves.<br>Después lo entiendes.</h1>
-<p>Diez lecciones basadas en tu examen. Experimenta, mueve objetos y descubre las reglas antes de escribir fórmulas.</p></section>
+<p>Diez lecciones basadas en tu examen. Experimenta, mueve objetos y descubre las reglas antes de escribir fórmulas.</p><a class="homework-link" href="deberes.html">Deberes de factorización, MCM y MCD →</a></section>
 <div class="row"><strong>Tu progreso</strong><span id="progressText" class="small"></span></div><div class="progress"><div id="bar"></div></div>
 <section class="panel"><div class="row"><span class="eyebrow" id="lessonLabel"></span><span class="small" id="stageLabel"></span></div>
 <h2 id="lessonTitle"></h2><div class="stages" id="stages"></div><div class="stage-label" id="modeTitle"></div>

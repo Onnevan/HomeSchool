@@ -22,5 +22,9 @@ Curso interactivo basado en un examen de 1.º de ESO de diez ejercicios. La ense
 
 Cada lección tiene cinco etapas, predicciones de comprensión y una pregunta de aplicación con corrección. El progreso se guarda localmente en `localStorage` del navegador: no se sincroniza entre dispositivos ni se transmite a un servidor.
 
+## Deberes de divisibilidad
+
+El enlace de la portada abre `deberes.html` con 20 ejercicios de dificultad progresiva. Los cuatro bloques trabajan factorización, MCD, MCM y problemas mixtos. Cada bloque tiene un ejemplo guiado, pistas, corrección y progreso guardado en el navegador.
+
 ## Limitaciones
 Es un laboratorio educativo inicial, no un reemplazo de las clases ni un motor de geometría general. Algunos modelos visuales representan cantidades grandes a escala para evitar dibujar miles o millones de objetos.

@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101d31">
+<title>Deberes de divisibilidad · HomeSchool</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1527;--panel:#162841;--line:#36526e;--ink:#f2f7ff;--muted:#bfd0e2;--blue:#9bdaff;--gold:#ffd082;--green:#96e6c8}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#203e5d,var(--bg) 65%);color:var(--ink);font:1rem/1.55 system-ui,sans-serif;min-height:100vh}
+main,header{max-width:860px;margin:auto;padding:clamp(16px,4vw,32px)}
+header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+a{color:var(--blue)}
+h1,h2,h3,p{margin-top:0}
+h1{font-size:clamp(2.1rem,6vw,4rem);line-height:1.02;letter-spacing:-.045em;margin-bottom:16px}
+h2{font-size:clamp(1.55rem,4vw,2.25rem);line-height:1.15}
+p{font-size:1.12rem}
+.intro,.muted,small{color:var(--muted)}
+button,input,select{font:inherit;color:inherit;border:1px solid #6884a0;border-radius:10px;padding:10px 13px;background:#203b58}
+button,summary{cursor:pointer}
+button:hover{background:#2d5379}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0 24px}
+nav button{text-align:left;min-width:0;font-weight:700}
+nav small{display:block;font-weight:400}
+nav [aria-current=true]{border-color:var(--blue);background:#20537a}
+.panel,article{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:clamp(15px,3vw,24px);margin-bottom:14px}
+summary{font-weight:750;color:var(--blue)}
+details[open] summary{margin-bottom:12px}
+.example{background:#102035;border-radius:12px;padding:14px;margin:12px 0}
+.example p:last-child{margin-bottom:0}
+.tiles{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:8px 0 14px}
+.tile{min-width:36px;text-align:center;border-radius:8px;padding:3px 9px;font-weight:800;background:#244d70;border:1px solid #6596bd}
+.tile[data-prime="3"]{background:#584173;border-color:#a696c3}
+.tile[data-prime="5"]{background:#61492c;border-color:#c3a06d}
+.progress{display:flex;align-items:center;gap:12px;margin-top:20px}
+progress{flex:1;accent-color:var(--green);height:13px}
+form{display:flex;flex-wrap:wrap;align-items:end;gap:10px;margin:12px 0}
+label{display:grid;gap:4px;min-width:0}
+input{width:min(210px,100%)}
+input,select{background:#101f33}
+.primary{background:#205781;border-color:#77bbe8;font-weight:750}
+.feedback{margin:10px 0 0;font-weight:650}
+.feedback:empty{display:none}
+.ok{color:var(--green)}
+.retry{color:var(--gold)}
+.exercise-title{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.exercise-title h3{margin:0}
+article>p{margin:8px 0}
+article details{margin-top:10px}
+.bottom{display:flex;justify-content:flex-end;margin:22px 0}
+@media(max-width:620px){nav{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header><a href="./">← Volver a HomeSchool</a><span class="muted">Matemáticas · 1.º ESO</span></header>
+<main>
+<h1>Deberes de divisibilidad</h1>
+<p class="intro">Descompón números en primos y aprende a resolver problemas de MCM y MCD.</p>
+<div class="progress"><label for="progress">Progreso</label><progress id="progress" max="20" value="0"></progress><output id="count">0 de 20</output></div>
+<nav id="levels" aria-label="Bloques de deberes"></nav>
+<section class="panel" aria-labelledby="title">
+<h2 id="title" tabindex="-1"></h2>
+<p id="instruction"></p>
+<details id="example"><summary>Ver un ejemplo paso a paso</summary><div class="example" id="example-content"></div></details>
+</section>
+<section id="exercises" aria-label="Ejercicios"></section>
+<div class="bottom" id="bottom"></div>
+</main>
+<script>
+'use strict';
+const blocks = [
+  {
+    label: 'Factorización',
+    instruction: 'Factorizar es escribir un número como una multiplicación de primos. Prueba a dividir por 2, 3, 5 o 7. Sigue con el resultado hasta llegar a 1.',
+    steps: [
+      'Empezamos con 12. Como es par, dividimos entre 2 y nos queda 6.',
+      '6 también es par. Dividimos otra vez entre 2 y queda 3.',
+      '3 es primo. Dividimos entre 3 y llegamos a 1.',
+      'Los divisores que usamos fueron 2, 2 y 3. Por tanto, 12 = 2 × 2 × 3 = 2² × 3.'
+    ],
+    questions: [
+      [18, 'Empieza por 2. Queda 9, que puedes dividir entre 3.'],
+      [28, 'Prueba dos veces con el 2. ¿Qué primo queda?'],
+      [45, 'La suma de sus cifras es 9. Puedes empezar por 3.'],
+      [72, 'Divide entre 2 mientras el resultado sea par. Después prueba con 3.'],
+      [210, 'Empieza por 2 y prueba después con 3. ¿En qué dos primos se descompone 35?']
+    ]
+  },
+  {
+    label: 'MCD',
+    instruction: 'El máximo común divisor es el mayor número que divide a todos sin dejar resto. Coge solo los primos que aparecen en todos y usa cada uno las veces que puedas emparejarlo.',
+    steps: [
+      'Descomponemos 12 y 18 en primos.',
+      'Podemos emparejar un 2 y un 3. Sobra un 2 en el 12 y un 3 en el 18.',
+      'Multiplicamos los factores emparejados. El MCD es 2 × 3 = 6. En potencias, esto es coger el exponente menor de cada primo común.'
+    ],
+    questions: [
+      [[8, 12], 'Ambos tienen dos doses. ¿Puedes emparejar un tercero?'],
+      [[18, 30], 'Factoriza los dos números. Busca el 2 y el 3 en las dos listas.'],
+      [[35, 64], '35 tiene un 5 y un 7. 64 solo tiene doses. Cuando no hay primos en común, el MCD es 1.'],
+      [[48, 72], '48 = 2⁴ × 3 y 72 = 2³ × 3². Escoge cuántos doses y treses puedes emparejar.'],
+      [[36, 60, 84], 'Busca los primos presentes en los tres números. Compara cuántas veces aparece cada uno.']
+    ]
+  },
+  {
+    label: 'MCM',
+    instruction: 'El mínimo común múltiplo es el primer múltiplo positivo de todos los números. Incluye todos los primos que aparezcan y toma de cada uno la mayor cantidad que veas en una sola lista.',
+    steps: [
+      'Descomponemos 12 y 18 en primos.',
+      'Para que el resultado sea múltiplo de 12 necesitamos dos doses. Para que también sea múltiplo de 18 necesitamos dos treses.',
+      'Multiplicamos 2 × 2 × 3 × 3 = 36. En potencias, esto es coger el exponente mayor de cada primo que aparezca.'
+    ],
+    questions: [
+      [[6, 8], 'El 8 necesita tres doses. El 6 necesita un tres además de un dos.'],
+      [[15, 20], 'Los dos tienen un 5. El 20 necesita dos doses y el 15 necesita un tres.'],
+      [[9, 27], 'Los dos solo tienen treses. ¿Cuál necesita más?'],
+      [[14, 25], 'No comparten primos. Reúne todos los factores de los dos números.'],
+      [[12, 15, 20], 'Compara por separado cuántos doses, treses y cincos necesita cada número.']
+    ]
+  },
+  {
+    label: 'Problemas mixtos',
+    instruction: 'Para repartir en el mayor número de grupos iguales, piensa en divisores. Para encontrar cuándo vuelven a coincidir dos o más ritmos, piensa en múltiplos.',
+    steps: [
+      'Si tienes 12 lápices y 18 rotuladores y quieres hacer el mayor número de paquetes iguales, usa el MCD. Puedes hacer 6 paquetes.',
+      'Si dos luces parpadean cada 12 y 18 segundos, usa el MCM. Si las dos se encienden ahora, coinciden otra vez dentro de 36 segundos.'
+    ],
+    questions: [
+      [[8, 12], 'Dos alarmas suenan ahora. Una suena cada 8 minutos y la otra cada 12. ¿Cuántos minutos pasarán hasta que vuelvan a sonar juntas?', 'MCM', 'Buscas un minuto que aparezca en las dos listas de múltiplos.'],
+      [[24, 36], 'Tienes 24 pegatinas azules y 36 verdes. Quieres hacer el mayor número posible de sobres idénticos usando todas. ¿Cuántos sobres puedes hacer?', 'MCD', 'El número de sobres debe dividir a 24 y a 36 sin dejar resto.'],
+      [[42, 56], 'Dos cuerdas miden 42 cm y 56 cm. Quieres cortarlas en trozos iguales, lo más largos posible y sin que sobre cuerda. ¿Cuánto mide cada trozo en centímetros?', 'MCD', 'La longitud de un trozo debe dividir a las dos longitudes.'],
+      [[6, 10, 15], 'Tres autobuses salen juntos a las 9:00. Salen cada 6, 10 y 15 minutos. ¿Cuántos minutos pasarán hasta que vuelvan a salir los tres juntos?', 'MCM', 'Busca el primer múltiplo positivo de los tres intervalos.'],
+      [[84, 126, 210], 'Hay 84 lápices, 126 gomas y 210 pegatinas. Quieres hacer el mayor número de lotes idénticos usando todos los materiales. ¿Cuántos lotes puedes hacer?', 'MCD', 'Factoriza los tres números y busca lo que puedes emparejar en los tres.']
+    ]
+  }
+];
+const total = blocks.reduce((sum, block) => sum + block.questions.length, 0);
+const key = 'homeschool-deberes-divisibilidad-v1';
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(key)) || {}; } catch {}
+const completed = new Set(Array.isArray(saved.completed)
+  ? saved.completed.filter(id => /^([0-3])-([0-4])$/.test(id)) : []);
+let active = Number.isInteger(saved.active) && blocks[saved.active] ? saved.active : 0;
+const $ = id => document.getElementById(id);
+const drafts = new Map();
+
+function primes(number) {
+  const factors = [];
+  for (let divisor = 2; divisor * divisor <= number; divisor++) {
+    while (number % divisor === 0) {
+      factors.push(divisor);
+      number /= divisor;
+    }
+  }
+  if (number > 1) factors.push(number);
+  return factors;
+}
+
+function readFactors(text) {
+  const terms = text.trim().replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g, digits =>
+    '^' + [...digits].map(d => '⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(d)).join('')
+  ).split(/\s*[×xX*·]\s*|\s+/);
+  const result = [];
+  for (const term of terms) {
+    const match = /^(\d+)(?:\^(\d+))?$/.exec(term);
+    if (!match || +match[1] < 2 || +(match[2] ?? 1) < 1 || +(match[2] ?? 1) > 12) return null;
+    result.push(...Array(+(match[2] ?? 1)).fill(+match[1]));
+  }
+  return result.sort((a, b) => a - b);
+}
+
+function combine(numbers, method) {
+  const lists = numbers.map(primes);
+  const bases = [...new Set(lists.flat())].sort((a,b) => a-b);
+  const chosen = bases.flatMap(base => {
+    const counts = lists.map(list => list.filter(value => value === base).length);
+    const count = method === 'MCD' ? Math.min(...counts) : Math.max(...counts);
+    return Array(count).fill(base);
+  });
+  return {chosen, answer: chosen.reduce((product, value) => product * value, 1)};
+}
+
+function save() {
+  try { localStorage.setItem(key, JSON.stringify({completed: [...completed], active})); } catch {}
+}
+
+function tiles(factors) {
+  return '<div class="tiles">' + factors.map(factor =>
+    '<span class="tile" data-prime="' + factor + '">' + factor + '</span>'
+  ).join('<span aria-hidden="true">×</span><span class="muted" hidden> por </span>') + '</div>';
+}
+
+function showExample(block) {
+  let step = 0;
+  const box = $('example-content');
+  function draw() {
+    const visual = active === 0 ? tiles([2, 2, 3].slice(0, Math.min(step + 1, 3)))
+      : active === 1 || active === 2 ? '<strong>12</strong>' + tiles([2,2,3]) + '<strong>18</strong>' + tiles([2,3,3])
+        + (step === 2 ? '<strong>Factores elegidos</strong>' + tiles(active === 1 ? [2,3] : [2,2,3,3]) : '')
+      : '';
+    box.innerHTML = '<p aria-live="polite">' + block.steps[step] + '</p>' + visual
+      + '<button type="button">' + (step === block.steps.length - 1 ? 'Volver al primer paso' : 'Siguiente paso') + '</button>';
+    box.querySelector('button').onclick = () => {
+      step = (step + 1) % block.steps.length;
+      draw();
+      box.querySelector('button').focus();
+    };
+  }
+  draw();
+}
+
+function updateProgress() {
+  $('progress').value = completed.size;
+  $('count').textContent = completed.size + ' de ' + total;
+  $('levels').querySelectorAll('small').forEach((counter, index) => {
+    const count = blocks[index].questions.filter((_, i) => completed.has(index + '-' + i)).length;
+    counter.textContent = count + '/' + blocks[index].questions.length + ' resueltos';
+  });
+}
+
+function exercise(question, index) {
+  const id = active + '-' + index;
+  const isFactor = active === 0;
+  const isMixed = active === 3;
+  const method = isMixed ? question[2] : blocks[active].label;
+  const hint = isMixed ? question[3] : question[1];
+  const prompt = isFactor ? 'Descompón ' + question[0] + ' en factores primos.'
+    : isMixed ? question[1] : 'Calcula el ' + method + ' de ' + question[0].join(', ').replace(/, ([^,]+)$/, ' y $1') + '.';
+  const expected = isFactor ? primes(question[0]) : combine(question[0], method);
+  const factText = factors => factors.join(' × ');
+  const solution = isFactor ? question[0] + ' = ' + factText(expected) + '.'
+    : question[0].map(n => n + ' = ' + factText(primes(n))).join(' · ') + '. '
+      + method + ' = ' + (expected.chosen.length > 1 ? factText(expected.chosen) + ' = ' : '') + expected.answer + '.';
+  const card = document.createElement('article');
+  card.innerHTML = '<div class="exercise-title"><h3>Ejercicio ' + (index + 1) + '</h3><small class="ok status"></small></div>'
+    + '<p>' + prompt + '</p><form>'
+    + (isMixed ? '<label>Operación<select name="method" required><option value="">Elige</option><option>MCD</option><option>MCM</option></select></label>' : '')
+    + '<label>' + (isFactor ? 'Factores primos' : 'Resultado') + '<input name="answer" required maxlength="75" '
+    + (isFactor ? 'placeholder="Ej. 2 × 2 × 3"' : 'inputmode="numeric"') + ' autocomplete="off"></label>'
+    + '<button class="primary">Comprobar</button></form>'
+    + '<p class="feedback" role="status"></p><details><summary>Ver pista</summary><p>' + hint + '</p></details>';
+  const form = card.querySelector('form');
+  const answer = form.elements.answer;
+  const choice = form.elements.method;
+  const feedback = card.querySelector('.feedback');
+  const status = card.querySelector('.status');
+  const draft = drafts.get(id);
+  if (draft) {
+    answer.value = draft.answer;
+    if (choice) choice.value = draft.method;
+  }
+  if (completed.has(id)) status.textContent = '✓ Resuelto';
+  form.oninput = () => {
+    drafts.set(id, {answer: answer.value, method: choice?.value});
+    feedback.textContent = '';
+  };
+  form.onsubmit = event => {
+    event.preventDefault();
+    let error = '';
+    if (isFactor) {
+      const factors = readFactors(answer.value);
+      if (!factors) error = 'Escribe una multiplicación, por ejemplo 2 × 2 × 3 o 2^2 × 3.';
+      else if (factors.reduce((product, factor) => product * factor, 1) !== question[0]) {
+        error = 'Ese producto da un número distinto. Revisa tus divisiones.';
+      } else if (String(factors) !== String(expected)) {
+        error = 'El producto coincide. Sigue descomponiendo los factores que aún se puedan dividir.';
+      }
+    } else if (isMixed && choice.value !== method) {
+      error = 'Revisa qué te piden: un reparto sin sobras o la primera coincidencia.';
+    } else if (!/^\d+$/.test(answer.value.trim()) || +answer.value !== expected.answer) {
+      error = 'Revisa qué factores eliges y vuelve a multiplicarlos.';
+    }
+    feedback.className = 'feedback ' + (error ? 'retry' : 'ok');
+    feedback.textContent = error || '✓ Correcto. ' + solution;
+    if (!error) {
+      completed.add(id);
+      status.textContent = '✓ Resuelto';
+      save();
+      updateProgress();
+    }
+  };
+  return card;
+}
+
+function render(focus = false) {
+  $('levels').innerHTML = blocks.map((block, index) =>
+    '<button type="button" aria-current="' + (index === active) + '">' + block.label + '<small></small></button>'
+  ).join('');
+  function go(index) {
+    active = index;
+    save();
+    render(true);
+  }
+  $('levels').querySelectorAll('button').forEach((button, index) => button.onclick = () => go(index));
+  const block = blocks[active];
+  $('title').textContent = block.label;
+  $('instruction').textContent = block.instruction;
+  $('example').open = false;
+  showExample(block);
+  $('exercises').replaceChildren(...block.questions.map(exercise));
+  $('bottom').replaceChildren();
+  if (active < blocks.length - 1) {
+    const next = document.createElement('button');
+    next.textContent = 'Siguiente bloque →';
+    next.onclick = () => go(active + 1);
+    $('bottom').append(next);
+  }
+  updateProgress();
+  if (focus) $('title').focus();
+}
+render();
+</script>
+</body>
+</html>
