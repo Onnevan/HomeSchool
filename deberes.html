@@ -34,6 +34,13 @@ details[open] summary{margin-bottom:12px}
 .tile{min-width:36px;text-align:center;border-radius:8px;padding:3px 9px;font-weight:800;background:#244d70;border:1px solid #6596bd}
 .tile[data-prime="3"]{background:#584173;border-color:#a696c3}
 .tile[data-prime="5"]{background:#61492c;border-color:#c3a06d}
+.ladder{border-collapse:collapse;margin:12px 0;font-variant-numeric:tabular-nums}
+.ladder th{font-size:.87rem;color:var(--muted);padding:0 12px 5px}
+.ladder td{text-align:center;width:110px;height:42px;padding:3px 8px;font-size:1.25rem;font-weight:700}
+.ladder td:first-child{border-right:3px solid var(--blue)}
+.ladder input{width:74px;text-align:center;padding:5px 8px}
+.ladder-pair{display:flex;flex-wrap:wrap;gap:6px 20px}
+.frac-product{color:var(--green);font-weight:750}
 .progress{display:flex;align-items:center;gap:12px;margin-top:20px}
 progress{flex:1;accent-color:var(--green);height:13px}
 form{display:flex;flex-wrap:wrap;align-items:end;gap:10px;margin:12px 0}
@@ -73,9 +80,10 @@ article details{margin-top:10px}
 const blocks = [
   {
     label: 'Factorización',
-    instruction: 'Factorizar es escribir un número como una multiplicación de primos. Prueba a dividir por 2, 3, 5 o 7. Sigue con el resultado hasta llegar a 1.',
+    instruction: 'Escribe el número a la izquierda de la raya y un primo que lo divida sin resto a la derecha. Escribe el resultado debajo, a la izquierda. Repite hasta llegar a 1.',
     steps: [
-      'Empezamos con 12. Como es par, dividimos entre 2 y nos queda 6.',
+      'Escribimos el 12 arriba, a la izquierda.',
+      'Como el 12 es par, ponemos un 2 a la derecha. Escribimos debajo el resultado de 12 ÷ 2, que es 6.',
       '6 también es par. Dividimos otra vez entre 2 y queda 3.',
       '3 es primo. Dividimos entre 3 y llegamos a 1.',
       'Los divisores que usamos fueron 2, 2 y 3. Por tanto, 12 = 2 × 2 × 3 = 2² × 3.'
@@ -158,19 +166,6 @@ function primes(number) {
   return factors;
 }
 
-function readFactors(text) {
-  const terms = text.trim().replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g, digits =>
-    '^' + [...digits].map(d => '⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(d)).join('')
-  ).split(/\s*[×xX*·]\s*|\s+/);
-  const result = [];
-  for (const term of terms) {
-    const match = /^(\d+)(?:\^(\d+))?$/.exec(term);
-    if (!match || +match[1] < 2 || +(match[2] ?? 1) < 1 || +(match[2] ?? 1) > 12) return null;
-    result.push(...Array(+(match[2] ?? 1)).fill(+match[1]));
-  }
-  return result.sort((a, b) => a - b);
-}
-
 function combine(numbers, method) {
   const lists = numbers.map(primes);
   const bases = [...new Set(lists.flat())].sort((a,b) => a-b);
@@ -192,12 +187,91 @@ function tiles(factors) {
   ).join('<span aria-hidden="true">×</span><span class="muted" hidden> por </span>') + '</div>';
 }
 
+function ladder(number, divisors, interactive = false) {
+  let current = number;
+  const rows = divisors.map(divisor => {
+    const row = '<tr><td>' + current + '</td><td>' + divisor + '</td></tr>';
+    current /= divisor;
+    return row;
+  });
+  const field = (name, label) =>
+    '<input name="' + name + '" aria-label="' + label + '" inputmode="numeric" maxlength="4" required autocomplete="off">';
+  rows.push('<tr><td>' + current + '</td><td>' + (interactive ? field('divisor', 'Divisor primo') : '') + '</td></tr>');
+  if (interactive) rows.push('<tr><td>' + field('quotient', 'Resultado de la división') + '</td><td></td></tr>');
+  return '<table class="ladder" aria-label="Factorización con raya vertical"><thead><tr>'
+    + '<th scope="col">Número</th><th scope="col">Divisor</th></tr></thead><tbody>' + rows.join('') + '</tbody></table>';
+}
+
+function factorExercise(question, index) {
+  const [number, hint] = question;
+  const id = '0-' + index;
+  const card = document.createElement('article');
+  const divisors = drafts.get(id) ?? (completed.has(id) ? primes(number) : []);
+  let current = divisors.reduce((value, divisor) => value / divisor, number);
+  card.innerHTML = '<div class="exercise-title"><h3>Ejercicio ' + (index + 1) + '</h3><small class="ok status"></small></div>'
+    + '<p>Descompón ' + number + ' en factores primos.</p><div class="factor-work"></div>'
+    + '<p class="feedback" role="status"></p><details><summary>Ver pista</summary><p>' + hint + '</p></details>';
+  const work = card.querySelector('.factor-work');
+  const feedback = card.querySelector('.feedback');
+
+  function draw() {
+    if (current === 1) {
+      card.querySelector('.status').textContent = '✓ Resuelto';
+      work.innerHTML = ladder(number, divisors) + '<p class="frac-product">' + number + ' = ' + divisors.join(' × ') + '</p>';
+      return;
+    }
+    work.innerHTML = '<form><div><small>Escribe el primo a la derecha y el resultado en la casilla de abajo.</small>'
+      + ladder(number, divisors, true)
+      + '<button class="primary">Comprobar división</button></div></form>';
+    const form = work.querySelector('form');
+    form.oninput = () => { feedback.textContent = ''; };
+    form.onsubmit = event => {
+      event.preventDefault();
+      const divisorText = form.elements.divisor.value.trim();
+      const quotientText = form.elements.quotient.value.trim();
+      const divisor = Number(divisorText);
+      const quotient = Number(quotientText);
+      let error = '';
+      if (!/^\d+$/.test(divisorText) || divisor < 2 || primes(divisor).length !== 1) {
+        error = 'El divisor tiene que ser primo, como 2, 3, 5 o 7.';
+      } else if (current % divisor !== 0) {
+        error = current + ' no se divide entre ' + divisor + ' sin dejar resto. Prueba con otro primo.';
+      } else if (!/^\d+$/.test(quotientText) || quotient !== current / divisor) {
+        error = 'El divisor es correcto. Revisa cuánto da ' + current + ' ÷ ' + divisor + '.';
+      }
+      feedback.className = 'feedback ' + (error ? 'retry' : 'ok');
+      if (error) {
+        feedback.textContent = error;
+        return;
+      }
+      const division = current + ' ÷ ' + divisor + ' = ' + quotient + '.';
+      divisors.push(divisor);
+      drafts.set(id, divisors);
+      current = quotient;
+      if (current === 1) {
+        completed.add(id);
+        save();
+        updateProgress();
+      }
+      draw();
+      feedback.textContent = '✓ ' + division + (current === 1 ? ' Has llegado a 1.' : ' Sigue con ' + current + '.');
+      if (current > 1) work.querySelector('input').focus();
+      else {
+        work.tabIndex = -1;
+        work.focus();
+      }
+    };
+  }
+  draw();
+  return card;
+}
+
 function showExample(block) {
   let step = 0;
   const box = $('example-content');
   function draw() {
-    const visual = active === 0 ? tiles([2, 2, 3].slice(0, Math.min(step + 1, 3)))
-      : active === 1 || active === 2 ? '<strong>12</strong>' + tiles([2,2,3]) + '<strong>18</strong>' + tiles([2,3,3])
+    const visual = active === 0 ? ladder(12, [2, 2, 3].slice(0, step))
+      : active === 1 || active === 2 ? '<div class="ladder-pair">' + ladder(12, [2,2,3]) + ladder(18, [2,3,3]) + '</div>'
         + (step === 2 ? '<strong>Factores elegidos</strong>' + tiles(active === 1 ? [2,3] : [2,2,3,3]) : '')
       : '';
     box.innerHTML = '<p aria-live="polite">' + block.steps[step] + '</p>' + visual
@@ -222,23 +296,20 @@ function updateProgress() {
 
 function exercise(question, index) {
   const id = active + '-' + index;
-  const isFactor = active === 0;
+  if (active === 0) return factorExercise(question, index);
   const isMixed = active === 3;
   const method = isMixed ? question[2] : blocks[active].label;
   const hint = isMixed ? question[3] : question[1];
-  const prompt = isFactor ? 'Descompón ' + question[0] + ' en factores primos.'
-    : isMixed ? question[1] : 'Calcula el ' + method + ' de ' + question[0].join(', ').replace(/, ([^,]+)$/, ' y $1') + '.';
-  const expected = isFactor ? primes(question[0]) : combine(question[0], method);
+  const prompt = isMixed ? question[1] : 'Calcula el ' + method + ' de ' + question[0].join(', ').replace(/, ([^,]+)$/, ' y $1') + '.';
+  const expected = combine(question[0], method);
   const factText = factors => factors.join(' × ');
-  const solution = isFactor ? question[0] + ' = ' + factText(expected) + '.'
-    : question[0].map(n => n + ' = ' + factText(primes(n))).join(' · ') + '. '
+  const solution = question[0].map(n => n + ' = ' + factText(primes(n))).join(' · ') + '. '
       + method + ' = ' + (expected.chosen.length > 1 ? factText(expected.chosen) + ' = ' : '') + expected.answer + '.';
   const card = document.createElement('article');
   card.innerHTML = '<div class="exercise-title"><h3>Ejercicio ' + (index + 1) + '</h3><small class="ok status"></small></div>'
     + '<p>' + prompt + '</p><form>'
     + (isMixed ? '<label>Operación<select name="method" required><option value="">Elige</option><option>MCD</option><option>MCM</option></select></label>' : '')
-    + '<label>' + (isFactor ? 'Factores primos' : 'Resultado') + '<input name="answer" required maxlength="75" '
-    + (isFactor ? 'placeholder="Ej. 2 × 2 × 3"' : 'inputmode="numeric"') + ' autocomplete="off"></label>'
+    + '<label>Resultado<input name="answer" required maxlength="75" inputmode="numeric" autocomplete="off"></label>'
     + '<button class="primary">Comprobar</button></form>'
     + '<p class="feedback" role="status"></p><details><summary>Ver pista</summary><p>' + hint + '</p></details>';
   const form = card.querySelector('form');
@@ -259,15 +330,7 @@ function exercise(question, index) {
   form.onsubmit = event => {
     event.preventDefault();
     let error = '';
-    if (isFactor) {
-      const factors = readFactors(answer.value);
-      if (!factors) error = 'Escribe una multiplicación, por ejemplo 2 × 2 × 3 o 2^2 × 3.';
-      else if (factors.reduce((product, factor) => product * factor, 1) !== question[0]) {
-        error = 'Ese producto da un número distinto. Revisa tus divisiones.';
-      } else if (String(factors) !== String(expected)) {
-        error = 'El producto coincide. Sigue descomponiendo los factores que aún se puedan dividir.';
-      }
-    } else if (isMixed && choice.value !== method) {
+    if (isMixed && choice.value !== method) {
       error = 'Revisa qué te piden: un reparto sin sobras o la primera coincidencia.';
     } else if (!/^\d+$/.test(answer.value.trim()) || +answer.value !== expected.answer) {
       error = 'Revisa qué factores eliges y vuelve a multiplicarlos.';
@@ -297,7 +360,7 @@ function render(focus = false) {
   const block = blocks[active];
   $('title').textContent = block.label;
   $('instruction').textContent = block.instruction;
-  $('example').open = false;
+  $('example').open = active === 0;
   showExample(block);
   $('exercises').replaceChildren(...block.questions.map(exercise));
   $('bottom').replaceChildren();
