@@ -316,13 +316,15 @@ function exercise(question, index) {
   const id = active + '-' + index;
   if (active === 0) return factorExercise(question, index);
   const isMixed = active === 3;
-  const hasLadders = active === 1 || active === 2;
   const method = isMixed ? question[2] : blocks[active].label;
   const hint = isMixed ? question[3] : question[1];
   const hintRule = active === 2
     ? '<p><strong>Regla del MCM.</strong> Elige todos los primos que aparezcan. Si un primo sale en varios números, quédate con su exponente mayor. Si solo sale en uno, usa el exponente que tiene ahí.</p>'
     : '';
   const prompt = isMixed ? question[1] : 'Calcula el ' + method + ' de ' + question[0].join(', ').replace(/, ([^,]+)$/, ' y $1') + '.';
+  const ladderInstruction = isMixed
+    ? 'Descompón los números del enunciado. Escribe el primo a la derecha y el cociente debajo hasta llegar a 1.'
+    : 'Escribe el primo a la derecha y el cociente debajo. Cuando llegues a 1 en cada raya, compara los factores para calcular el ' + method + '.';
   const expected = combine(question[0], method);
   const factText = factors => factors.join(' × ');
   const solution = question[0].map(n => n + ' = ' + factText(primes(n))).join(' · ') + '. '
@@ -330,26 +332,24 @@ function exercise(question, index) {
   const card = document.createElement('article');
   card.innerHTML = '<div class="exercise-title"><h3>Ejercicio ' + (index + 1) + '</h3><small class="ok status"></small></div>'
     + '<p>' + prompt + '</p>'
-    + (hasLadders ? '<div class="exercise-ladders"><p>Escribe el primo a la derecha y el cociente debajo. Cuando llegues a 1 en cada raya, compara los factores para calcular el ' + method + '.</p><div class="ladder-pair"></div></div>' : '')
+    + '<div class="exercise-ladders"><p>' + ladderInstruction + '</p><div class="ladder-pair"></div></div>'
     + '<form class="answer-form">'
     + (isMixed ? '<label>Operación<select name="method" required><option value="">Elige</option><option>MCD</option><option>MCM</option></select></label>' : '')
-    + '<label>' + (hasLadders ? method : 'Resultado') + '<input name="answer" required maxlength="75" inputmode="numeric" autocomplete="off"></label>'
+    + '<label>' + (isMixed ? 'Resultado' : method) + '<input name="answer" required maxlength="75" inputmode="numeric" autocomplete="off"></label>'
     + '<button class="primary">Comprobar</button></form>'
-    + '<p class="feedback" role="status"></p><details><summary>Ver pista</summary>' + hintRule + '<p>' + hint + '</p></details>';
-  if (hasLadders) {
-    const pair = card.querySelector('.ladder-pair');
-    question[0].forEach((number, position) => {
-      const work = document.createElement('section');
-      work.className = 'factor-work';
-      work.innerHTML = '<h4>Descompón ' + number + '</h4>';
-      pair.append(work);
-      mountFactorLadder(work, number, id + '-factor-' + position);
-    });
-  }
+    + '<p class="feedback answer-feedback" role="status"></p><details><summary>Ver pista</summary>' + hintRule + '<p>' + hint + '</p></details>';
+  const pair = card.querySelector('.ladder-pair');
+  question[0].forEach((number, position) => {
+    const work = document.createElement('section');
+    work.className = 'factor-work';
+    work.innerHTML = '<h4>Descompón ' + number + '</h4>';
+    pair.append(work);
+    mountFactorLadder(work, number, id + '-factor-' + position);
+  });
   const form = card.querySelector('.answer-form');
   const answer = form.elements.answer;
   const choice = form.elements.method;
-  const feedback = card.querySelector('.feedback');
+  const feedback = card.querySelector('.answer-feedback');
   const status = card.querySelector('.status');
   const draft = drafts.get(id);
   if (draft) {
