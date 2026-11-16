@@ -330,7 +330,7 @@ function exercise(question, index) {
   const card = document.createElement('article');
   card.innerHTML = '<div class="exercise-title"><h3>Ejercicio ' + (index + 1) + '</h3><small class="ok status"></small></div>'
     + '<p>' + prompt + '</p>'
-    + (active === 1 ? '<div class="mcd-ladders"><p>Escribe el primo a la derecha y el cociente debajo. Cuando llegues a 1 en cada raya, compara los factores para calcular el MCD.</p><div class="ladder-pair"></div></div>' : '')
+    + (hasLadders ? '<div class="exercise-ladders"><p>Escribe el primo a la derecha y el cociente debajo. Cuando llegues a 1 en cada raya, compara los factores para calcular el ' + method + '.</p><div class="ladder-pair"></div></div>' : '')
     + '<form class="answer-form">'
     + (isMixed ? '<label>Operación<select name="method" required><option value="">Elige</option><option>MCD</option><option>MCM</option></select></label>' : '')
     + '<label>' + (hasLadders ? method : 'Resultado') + '<input name="answer" required maxlength="75" inputmode="numeric" autocomplete="off"></label>'
