@@ -26,9 +26,7 @@ h3{font-size:1.1rem}
 .dashboard{display:grid;grid-template-columns:1.8fr 1fr;gap:20px;align-items:start}
 .math{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:clamp(14px,3vw,23px)}
 .math-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.math-heading{display:flex;align-items:center;gap:12px}
 .subject-icon{flex:none;width:39px;height:39px;display:grid;place-items:center;border-radius:11px;background:var(--soft);color:var(--accent);font-size:.8rem;font-weight:800}
-.math .subject-icon{background:var(--accent);color:#1a240f;font-size:1.25rem}
 .resume{background:var(--accent);color:#18210e;border-radius:10px;padding:8px 13px;font-weight:800;text-decoration:none}
 .resume:hover{background:#ebffaa}
 .homework{margin-block:18px 20px;background:#273d30;border:1px solid #507051;border-radius:13px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;text-decoration:none}
@@ -40,66 +38,104 @@ ul,ol{list-style:none;margin:0;padding:0}
 .lesson-number{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.8rem}
 small{display:block;font-size:.82rem}
 .arrow{margin-left:auto;color:var(--accent)}
-.done{margin-left:auto;color:var(--accent)}
-.done+.arrow{margin-left:0}
-.done[hidden]+.arrow{margin-left:auto}
 .subjects h2{margin:0 0 11px}
 .subjects ul{display:grid;gap:7px}
-.subjects li{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:11px;background:var(--panel)}
 .subjects details{margin-top:14px;border:1px solid var(--line);border-radius:11px;background:var(--panel);padding:10px 12px}
 summary{cursor:pointer;font-weight:750}
-.subjects details ul{list-style:disc;padding:10px 0 4px 17px}
-.subjects details li{display:list-item;border:0;padding:0;color:var(--muted);font-size:.9rem}
 footer{padding-block:22px 30px;color:var(--muted);font-size:.86rem}
 footer a{color:var(--accent)}
 @media(max-width:740px){.dashboard{grid-template-columns:1fr}.subjects ul{grid-template-columns:repeat(2,minmax(0,1fr))}.subjects details ul{grid-template-columns:1fr}}
 @media(max-width:450px){.subjects ul{grid-template-columns:1fr}.homework strong{font-size:.95rem}}
+
+.dashboard{grid-template-columns:minmax(0,1fr) minmax(0,1.65fr);gap:24px}
+.subjects li{display:block;padding:0;border:0;background:transparent}
+.subject-card{display:grid;grid-template-columns:39px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 12px;background:var(--panel);border:1px solid var(--line);border-inline-start:3px solid var(--subject);border-radius:11px;text-decoration:none}
+.subject-card:hover{background:var(--soft);border-color:var(--subject)}
+.subject-card .subject-icon{background:var(--subject);color:#142219}
+.subject-card .arrow{color:var(--subject)}
+.subjects details ul{list-style:none;padding:10px 0 0}
+.subjects details li{display:block;padding:0}
+.subjects details .option-note{margin-top:8px}
+.math .heading-group{display:flex;align-items:center;gap:9px}
+.math .active-label{color:var(--accent);font-size:.88rem}
+.math .lessons a{align-items:center}
+.lesson-status{margin-left:auto;flex-shrink:0;color:var(--muted);font-size:.77rem}
+.lesson-status[data-complete=true]{color:var(--accent);font-weight:700}
+.lesson-status+.arrow{margin-left:0}
+.subject-view{--subject:var(--accent);padding-block:35px}
+.subject-view h1{font-size:clamp(2rem,7vw,4rem);margin-top:18px}
+.subject-view section{border-inline-start:4px solid var(--subject);padding:18px;background:var(--panel);border-radius:10px}
+.subject-view p{margin-top:6px;color:var(--muted)}
+@media(max-width:740px){.dashboard{grid-template-columns:1fr}.subjects ul{grid-template-columns:repeat(2,minmax(0,1fr))}.subjects details ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.subjects ul,.subjects details ul{grid-template-columns:1fr}.lesson-status{font-size:.72rem}.lessons a{gap:7px}}
 </style>
 </head>
 <body>
 <header><div class="brand"><b aria-hidden="true">∑</b>HomeSchool</div><span class="course">Castilla-La Mancha</span></header>
 <main>
-<div class="hero"><h1>1.º de ESO</h1><p>Materias y lecciones</p></div>
-<div class="dashboard">
-<section class="math" aria-labelledby="math-title">
-  <div class="math-head">
-    <div class="math-heading"><span class="subject-icon" aria-hidden="true">∑</span><div><h2 id="math-title">Matemáticas</h2><small id="math-progress">10 lecciones interactivas</small></div></div>
-    <a class="resume" id="resume" href="matematicas.html">Abrir Matemáticas →</a>
-  </div>
-  <a class="homework" href="deberes.html"><span><strong>Factorización, MCD y MCM</strong><small id="homework-progress">20 ejercicios · Deberes</small></span><span class="arrow" aria-hidden="true">→</span></a>
-  <h3 id="lessons-title">Lecciones</h3>
-  <ol class="lessons" aria-labelledby="lessons-title">
-<li><a href="matematicas.html?leccion=1"><span class="lesson-number">01</span><span><strong>La máquina de multiplicar</strong><small>Potencias</small></span><span class="done" data-done="1" hidden>✓</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-<li><a href="matematicas.html?leccion=2"><span class="lesson-number">02</span><span><strong>El constructor de cuadrados</strong><small>Raíces cuadradas</small></span><span class="done" data-done="2" hidden>✓</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-<li><a href="matematicas.html?leccion=3"><span class="lesson-number">03</span><span><strong>Construye un número gigante</strong><small>Descomposición polinómica</small></span><span class="done" data-done="3" hidden>✓</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-<li><a href="matematicas.html?leccion=4"><span class="lesson-number">04</span><span><strong>El taller de factores</strong><small>Propiedades de las potencias</small></span><span class="done" data-done="4" hidden>✓</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-<li><a href="matematicas.html?leccion=5"><span class="lesson-number">05</span><span><strong>La ruta de las operaciones</strong><small>Operaciones combinadas</small></span><span class="done" data-done="5" hidden>✓</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-<li><a href="matematicas.html?leccion=6"><span class="lesson-number">06</span><span><strong>El cuadrado incompleto</strong><small>Raíces no exactas y exponentes</small></span><span class="done" data-done="6" hidden>✓</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-<li><a href="matematicas.html?leccion=7"><span class="lesson-number">07</span><span><strong>El árbol que se multiplica</strong><small>Problema de generaciones</small></span><span class="done" data-done="7" hidden>✓</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-<li><a href="matematicas.html?leccion=8"><span class="lesson-number">08</span><span><strong>El arquitecto de cuadrados</strong><small>Superficies</small></span><span class="done" data-done="8" hidden>✓</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-<li><a href="matematicas.html?leccion=9"><span class="lesson-number">09</span><span><strong>Detectives de ángulos</strong><small>Geometría</small></span><span class="done" data-done="9" hidden>✓</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-<li><a href="matematicas.html?leccion=10"><span class="lesson-number">10</span><span><strong>La máquina del sesenta</strong><small>Sistema sexagesimal</small></span><span class="done" data-done="10" hidden>✓</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<div id="dashboard-view">
+  <div class="hero"><h1>1.º de ESO</h1><p>Materias, lecciones y progreso</p></div>
+  <div class="dashboard">
+    <nav class="subjects" aria-labelledby="subjects-title">
+      <h2 id="subjects-title">Materias</h2>
+      <ul><li><a class="subject-card" data-subject="matematicas" style="--subject:#d8f375" href="matematicas.html"><span class="subject-icon" aria-hidden="true">∑</span><span><strong>Matemáticas</strong><small id="math-card-progress">10 lecciones</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="biologia" style="--subject:#7be2aa" href="?materia=biologia"><span class="subject-icon" aria-hidden="true">BG</span><span><strong>Biología y Geología</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="lengua" style="--subject:#ffb18a" href="?materia=lengua"><span class="subject-icon" aria-hidden="true">LC</span><span><strong>Lengua Castellana y Literatura</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="geografia" style="--subject:#edc272" href="?materia=geografia"><span class="subject-icon" aria-hidden="true">GH</span><span><strong>Geografía e Historia</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="extranjera" style="--subject:#b8b4ff" href="?materia=extranjera"><span class="subject-icon" aria-hidden="true">LE</span><span><strong>Lengua Extranjera</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="tecnologia" style="--subject:#86d2ff" href="?materia=tecnologia"><span class="subject-icon" aria-hidden="true">TD</span><span><strong>Tecnología y Digitalización</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="musica" style="--subject:#f6a7dc" href="?materia=musica"><span class="subject-icon" aria-hidden="true">MÚ</span><span><strong>Música</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="educacion-fisica" style="--subject:#f5a7a0" href="?materia=educacion-fisica"><span class="subject-icon" aria-hidden="true">EF</span><span><strong>Educación Física</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="religion" style="--subject:#c2ccad" href="?materia=religion"><span class="subject-icon" aria-hidden="true">RE</span><span><strong>Religión / Atención educativa</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li></ul>
+      <details><summary>Materias optativas</summary><ul><li><a class="subject-card" data-subject="segunda-lengua" style="--subject:#a4bfff" href="?materia=segunda-lengua"><span class="subject-icon" aria-hidden="true">2L</span><span><strong>Segunda Lengua Extranjera</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="emprendimiento" style="--subject:#e0dc8b" href="?materia=emprendimiento"><span class="subject-icon" aria-hidden="true">EP</span><span><strong>Taller de Emprendimiento y Finanzas Personales</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="artes" style="--subject:#edb0ff" href="?materia=artes"><span class="subject-icon" aria-hidden="true">AP</span><span><strong>Proyectos de Artes Plásticas y Visuales</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="proyecto" style="--subject:#78dcd6" href="?materia=proyecto"><span class="subject-icon" aria-hidden="true">PC</span><span><strong>Trabajo monográfico o proyecto del centro</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li></ul><small class="option-note">La oferta depende del centro.</small></details>
+    </nav>
+    <section class="math" aria-labelledby="lessons-title">
+      <div class="math-head">
+        <div><div class="heading-group"><h2 id="lessons-title">Lecciones</h2><span class="active-label">Matemáticas</span></div><small id="math-progress">10 lecciones interactivas</small></div>
+        <a class="resume" id="resume" href="matematicas.html">Abrir Matemáticas →</a>
+      </div>
+      <a class="homework" href="deberes.html"><span><strong>Factorización, MCD y MCM</strong><small id="homework-progress">20 ejercicios · Deberes</small></span><span class="arrow" aria-hidden="true">→</span></a>
+      <ol class="lessons" aria-labelledby="lessons-title">
+<li><a href="matematicas.html?leccion=1"><span class="lesson-number">01</span><span><strong>La máquina de multiplicar</strong><small>Potencias</small></span><span class="lesson-status" data-done="1">Pendiente</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="matematicas.html?leccion=2"><span class="lesson-number">02</span><span><strong>El constructor de cuadrados</strong><small>Raíces cuadradas</small></span><span class="lesson-status" data-done="2">Pendiente</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="matematicas.html?leccion=3"><span class="lesson-number">03</span><span><strong>Construye un número gigante</strong><small>Descomposición polinómica</small></span><span class="lesson-status" data-done="3">Pendiente</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="matematicas.html?leccion=4"><span class="lesson-number">04</span><span><strong>El taller de factores</strong><small>Propiedades de las potencias</small></span><span class="lesson-status" data-done="4">Pendiente</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="matematicas.html?leccion=5"><span class="lesson-number">05</span><span><strong>La ruta de las operaciones</strong><small>Operaciones combinadas</small></span><span class="lesson-status" data-done="5">Pendiente</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="matematicas.html?leccion=6"><span class="lesson-number">06</span><span><strong>El cuadrado incompleto</strong><small>Raíces no exactas y exponentes</small></span><span class="lesson-status" data-done="6">Pendiente</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="matematicas.html?leccion=7"><span class="lesson-number">07</span><span><strong>El árbol que se multiplica</strong><small>Problema de generaciones</small></span><span class="lesson-status" data-done="7">Pendiente</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="matematicas.html?leccion=8"><span class="lesson-number">08</span><span><strong>El arquitecto de cuadrados</strong><small>Superficies</small></span><span class="lesson-status" data-done="8">Pendiente</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="matematicas.html?leccion=9"><span class="lesson-number">09</span><span><strong>Detectives de ángulos</strong><small>Geometría</small></span><span class="lesson-status" data-done="9">Pendiente</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="matematicas.html?leccion=10"><span class="lesson-number">10</span><span><strong>La máquina del sesenta</strong><small>Sistema sexagesimal</small></span><span class="lesson-status" data-done="10">Pendiente</span><span class="arrow" aria-hidden="true">↗</span></a></li>
   </ol>
-</section>
-<section class="subjects" aria-labelledby="subjects-title">
-  <h2 id="subjects-title">Otras materias</h2>
-  <ul>
-<li><span class="subject-icon" aria-hidden="true">BG</span><div><strong>Biología y Geología</strong><small>Sin lecciones publicadas</small></div></li>
-<li><span class="subject-icon" aria-hidden="true">LC</span><div><strong>Lengua Castellana y Literatura</strong><small>Sin lecciones publicadas</small></div></li>
-<li><span class="subject-icon" aria-hidden="true">GH</span><div><strong>Geografía e Historia</strong><small>Sin lecciones publicadas</small></div></li>
-<li><span class="subject-icon" aria-hidden="true">LE</span><div><strong>Lengua Extranjera</strong><small>Sin lecciones publicadas</small></div></li>
-<li><span class="subject-icon" aria-hidden="true">TD</span><div><strong>Tecnología y Digitalización</strong><small>Sin lecciones publicadas</small></div></li>
-<li><span class="subject-icon" aria-hidden="true">MÚ</span><div><strong>Música</strong><small>Sin lecciones publicadas</small></div></li>
-<li><span class="subject-icon" aria-hidden="true">EF</span><div><strong>Educación Física</strong><small>Sin lecciones publicadas</small></div></li>
-<li><span class="subject-icon" aria-hidden="true">RE</span><div><strong>Religión / Atención educativa</strong><small>Sin lecciones publicadas</small></div></li>
-  </ul>
-  <details><summary>Materias optativas</summary><ul><li>Segunda Lengua Extranjera</li><li>Taller de Emprendimiento y Finanzas Personales</li><li>Proyectos de Artes Plásticas y Visuales</li><li>Trabajo monográfico o proyecto del centro</li></ul><small>La oferta depende del centro. Sin lecciones publicadas.</small></details>
-</section>
+    </section>
+  </div>
+</div>
+<div id="subject-view" class="subject-view" hidden>
+  <a href="./">← Volver al panel</a>
+  <h1 id="subject-name"></h1>
+  <section aria-labelledby="subject-lessons"><h2 id="subject-lessons">Lecciones</h2><p>Sin lecciones publicadas en esta materia.</p></section>
 </div>
 </main>
 <footer><a href="https://educacion.castillalamancha.es/biblioteca-normativa/educacion-secundaria-obligatoria/educacion-secundaria-obligatoria/normativa/decreto-312024-de-25-de-junio">Currículo de Castilla-La Mancha</a> · Progreso guardado en este navegador</footer>
 <script>
 'use strict';
+
+const subjectId = new URLSearchParams(window.location.search).get('materia');
+const subject = [...document.querySelectorAll('[data-subject]')].find(card => card.dataset.subject === subjectId);
+if (subjectId === 'matematicas') window.location.replace('matematicas.html');
+else if (subject) {
+  const name = subject.querySelector('strong').textContent;
+  const view = document.getElementById('subject-view');
+  view.style.setProperty('--subject', subject.style.getPropertyValue('--subject'));
+  document.getElementById('subject-name').textContent = name;
+  document.title = name + ' · HomeSchool';
+  document.getElementById('dashboard-view').hidden = true;
+  view.hidden = false;
+}
+
 function readProgress(key) {
   try { return JSON.parse(localStorage.getItem(key)) ?? {}; }
   catch { return {}; }
@@ -109,10 +145,12 @@ function showProgress() {
   const math = readProgress('homeschool-v3');
   const done = new Set(Array.isArray(math.done) ? math.done.filter(n => Number.isInteger(n) && n >= 0 && n < 10) : []);
   document.querySelectorAll('[data-done]').forEach(mark => {
-    mark.hidden = !done.has(Number(mark.dataset.done) - 1);
-    mark.setAttribute('aria-label', 'Completada');
+    const complete = done.has(Number(mark.dataset.done) - 1);
+    mark.dataset.complete = String(complete);
+    mark.textContent = complete ? '✓ Completada' : 'Pendiente';
   });
   document.getElementById('math-progress').textContent = done.size + ' de 10 lecciones completadas';
+  document.getElementById('math-card-progress').textContent = done.size + ' de 10 completadas';
   document.getElementById('resume').textContent = Number.isInteger(math.lesson) ? 'Continuar Matemáticas →' : 'Abrir Matemáticas →';
 
   const homework = readProgress('homeschool-deberes-divisibilidad-v1');
