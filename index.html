@@ -75,7 +75,11 @@ footer a{color:var(--accent)}
 .subject-view .subject-label,.subject-view a{color:var(--subject)}
 .subject-view .subject-label{font-size:.88rem;font-weight:750}
 .subject-view section,.topic-index{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:clamp(14px,3vw,22px);margin-bottom:14px}
-.topic-index ol{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,245px),1fr));gap:8px;margin-top:14px}
+.topic-index ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
+.topic-index li{min-width:0}
+.topic-index a>div{min-width:0;overflow-wrap:anywhere}
+@media(max-width:900px){.topic-index ol{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.topic-index ol{grid-template-columns:1fr}}
 .topic-index a{display:flex;gap:10px;align-items:center;min-height:48px;padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--soft);text-decoration:none;color:var(--text)}
 .topic-index a:hover{border-color:var(--subject)}
 .topic-index a span,.topic-number{color:var(--subject);font-variant-numeric:tabular-nums}
