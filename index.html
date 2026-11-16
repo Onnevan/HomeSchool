@@ -7,91 +7,7 @@
 <meta name="description" content="Materias y lecciones de 1.º de ESO en HomeSchool.">
 <title>HomeSchool · 1.º de ESO</title>
 <link rel="stylesheet" href="tema.css">
-<style>
-:root{--base:var(--surface-page);--panel:var(--surface-panel);--soft:var(--surface-raised);--line:var(--surface-border);--text:var(--text-main);--muted:var(--text-muted);--accent:var(--text-main)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--base);color:var(--text);font:1rem/1.55 system-ui,sans-serif}
-a{color:inherit}
-:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
-[hidden]{display:none!important}
-header,main,footer{max-width:1140px;margin:auto;padding-inline:clamp(18px,5vw,44px)}
-header{padding-block:21px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);gap:16px}
-.brand{font-weight:850;letter-spacing:-.04em;font-size:1.3rem}.brand b{color:var(--accent);margin-right:7px}
-.course,small,.muted{color:var(--muted)}
-h1,h2,h3,p{margin:0}
-h1{font-size:clamp(2.55rem,7vw,5.35rem);letter-spacing:-.066em;line-height:1.02;margin-bottom:12px}
-h2{font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.035em;line-height:1.16}
-h3{font-size:1.1rem}
-.hero{padding-block:clamp(28px,6vw,60px) 26px}
-.hero p{color:var(--muted);font-size:clamp(1rem,2.5vw,1.2rem)}
-.dashboard{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.45fr);gap:24px;align-items:start}
-.math{--accent:var(--math-accent);background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:clamp(14px,3vw,23px)}
-.math-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.subject-icon{flex:none;width:39px;height:39px;display:grid;place-items:center;border-radius:11px;background:var(--soft);color:var(--accent);font-size:.8rem;font-weight:800}
-.resume{background:var(--soft);color:var(--accent);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-weight:800;text-decoration:none}
-.resume:hover{background:var(--surface-hover);border-color:var(--accent)}
-.homework{margin-block:18px 20px;background:var(--soft);border:1px solid var(--line);border-radius:13px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;text-decoration:none}
-.homework:hover,.lessons a:hover{background:var(--surface-hover)}
-ul,ol{list-style:none;margin:0;padding:0}
-.lessons{margin-top:5px}
-.lessons li+li{border-top:1px solid var(--line)}
-.lessons a{display:flex;align-items:center;gap:11px;padding:10px 6px;text-decoration:none;border-radius:7px}
-.lesson-number{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.8rem}
-small{display:block;font-size:.82rem}
-.arrow{margin-left:auto;color:var(--accent)}
-.subjects h2{margin:0 0 11px}
-.subjects ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.subjects details{margin-top:14px;border:1px solid var(--line);border-radius:11px;background:var(--panel);padding:10px 12px}
-summary{cursor:pointer;font-weight:750}
-footer{padding-block:22px 30px;color:var(--muted);font-size:.86rem}
-footer a{color:var(--accent)}
-.subjects li{display:block;padding:0;border:0;background:transparent}
-.subject-card{height:100%;min-height:114px;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr;align-items:start;gap:9px 8px;padding:12px;background:var(--panel);border:1px solid var(--line);border-radius:14px;text-decoration:none;transition:background .18s,border-color .18s}
-.subject-card:hover,.subject-card:focus-visible{background:var(--soft);border-color:var(--subject)}
-.subject-card>span:nth-child(2){grid-row:2;grid-column:1/-1}
-.subject-card strong{display:block;font-size:.92rem;line-height:1.22;overflow-wrap:anywhere}
-.subject-card small{margin-top:4px;font-size:.74rem}
-.subject-card .subject-icon{background:var(--soft);color:var(--subject);border:1px solid var(--line);font-size:.9rem}
-.subject-card .arrow{grid-row:1;grid-column:2;align-self:center;color:var(--subject)}
-.subject-card:focus-visible{outline-color:var(--subject)}
-@media(prefers-reduced-motion:reduce){.subject-card{transition:none}}
-.subjects details ul{list-style:none;padding:10px 0 0}
-.subjects details li{display:block;padding:0}
-.subjects details .option-note{margin-top:8px}
-.math .heading-group{display:flex;align-items:center;gap:9px}
-.math .active-label{color:var(--accent);font-size:.88rem}
-.math .lessons a{align-items:center}
-.lesson-status{margin-left:auto;flex-shrink:0;color:var(--muted);font-size:.77rem}
-.lesson-status[data-complete=true]{color:var(--accent);font-weight:700}
-.lesson-status+.arrow{margin-left:0}
-.subject-view{--subject:var(--accent);padding-block:35px}
-.subject-view h1{color:var(--subject);font-size:clamp(2rem,7vw,4rem);margin-top:18px}
-.subject-view section{border-inline-start:4px solid var(--subject);padding:18px;background:var(--panel);border-radius:10px}
-.subject-view p{margin-top:6px;color:var(--muted)}
-@media(max-width:740px){.dashboard{grid-template-columns:1fr}.subjects ul{grid-template-columns:repeat(2,minmax(0,1fr))}.subjects details ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:480px){.subject-card{min-height:106px;padding:10px}.lesson-status{font-size:.72rem}.lessons a{gap:7px}}
-.subject-view .hero{padding-block:24px 20px}
-.subject-view h1{margin-top:4px;color:var(--text)}
-.subject-view .subject-label,.subject-view a{color:var(--subject)}
-.subject-view .subject-label{font-size:.88rem;font-weight:750}
-.subject-view section,.topic-index{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:clamp(14px,3vw,22px);margin-bottom:14px}
-.topic-index ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
-.topic-index li{min-width:0}
-.topic-index a>div{min-width:0;overflow-wrap:anywhere}
-@media(max-width:900px){.topic-index ol{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:560px){.topic-index ol{grid-template-columns:1fr}}
-.topic-index a{display:flex;gap:10px;align-items:center;min-height:48px;padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--soft);text-decoration:none;color:var(--text)}
-.topic-index a:hover{border-color:var(--subject)}
-.topic-index a span,.topic-number{color:var(--subject);font-variant-numeric:tabular-nums}
-.topic-card{scroll-margin-top:12px}
-.topic-card:target,.topic-card.current{border-color:var(--subject)}
-.topic-card h2{font-size:clamp(1.17rem,2.7vw,1.6rem)}
-.topic-card ul{margin-top:10px}
-.topic-card li+li{border-top:1px solid var(--line)}
-.topic-card li a{display:flex;justify-content:space-between;gap:10px;padding:8px 0}
-.topic-card .topic-state{display:block;margin-top:10px}
-.subject-view .lesson-status[data-complete=true]{color:var(--subject)}
-</style>
+<link rel="stylesheet" href="panel.css">
 </head>
 <body>
 <header><div class="brand"><b aria-hidden="true">∑</b>HomeSchool</div><span class="course">Castilla-La Mancha</span></header>
@@ -101,19 +17,19 @@ footer a{color:var(--accent)}
   <div class="dashboard">
     <nav class="subjects" aria-labelledby="subjects-title">
       <h2 id="subjects-title">Materias</h2>
-      <ul><li><a class="subject-card" data-subject="matematicas" style="--subject:var(--math-accent)" href="?materia=matematicas"><span class="subject-icon" aria-hidden="true">∑</span><span><strong>Matemáticas</strong><small id="math-card-progress">Ver temas · 10 lecciones</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
-<li><a class="subject-card" data-subject="biologia" style="--subject:#7be2aa" href="?materia=biologia"><span class="subject-icon" aria-hidden="true">BG</span><span><strong>Biología y Geología</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
-<li><a class="subject-card" data-subject="lengua" style="--subject:#ffb18a" href="?materia=lengua"><span class="subject-icon" aria-hidden="true">LC</span><span><strong>Lengua Castellana y Literatura</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
-<li><a class="subject-card" data-subject="geografia" style="--subject:#edc272" href="?materia=geografia"><span class="subject-icon" aria-hidden="true">GH</span><span><strong>Geografía e Historia</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
-<li><a class="subject-card" data-subject="extranjera" style="--subject:#b8b4ff" href="?materia=extranjera"><span class="subject-icon" aria-hidden="true">LE</span><span><strong>Inglés</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
-<li><a class="subject-card" data-subject="tecnologia" style="--subject:#86d2ff" href="?materia=tecnologia"><span class="subject-icon" aria-hidden="true">TD</span><span><strong>Tecnología y Digitalización</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
-<li><a class="subject-card" data-subject="musica" style="--subject:#f6a7dc" href="?materia=musica"><span class="subject-icon" aria-hidden="true">MÚ</span><span><strong>Música</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
-<li><a class="subject-card" data-subject="educacion-fisica" style="--subject:#f5a7a0" href="?materia=educacion-fisica"><span class="subject-icon" aria-hidden="true">EF</span><span><strong>Educación Física</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
-<li><a class="subject-card" data-subject="religion" style="--subject:#c2ccad" href="?materia=religion"><span class="subject-icon" aria-hidden="true">RE</span><span><strong>Religión / Atención educativa</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li></ul>
-      <details><summary>Materias optativas</summary><ul><li><a class="subject-card" data-subject="segunda-lengua" style="--subject:#a4bfff" href="?materia=segunda-lengua"><span class="subject-icon" aria-hidden="true">2L</span><span><strong>Francés</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
-<li><a class="subject-card" data-subject="emprendimiento" style="--subject:#e0dc8b" href="?materia=emprendimiento"><span class="subject-icon" aria-hidden="true">EP</span><span><strong>Taller de Emprendimiento y Finanzas Personales</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
-<li><a class="subject-card" data-subject="artes" style="--subject:#edb0ff" href="?materia=artes"><span class="subject-icon" aria-hidden="true">AP</span><span><strong>Proyectos de Artes Plásticas y Visuales</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
-<li><a class="subject-card" data-subject="proyecto" style="--subject:#78dcd6" href="?materia=proyecto"><span class="subject-icon" aria-hidden="true">PC</span><span><strong>Trabajo monográfico o proyecto del centro</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li></ul><small class="option-note">La oferta depende del centro.</small></details>
+      <ul><li><a class="subject-card" data-subject="matematicas" style="--subject:var(--math-accent)" href="materias/matematicas.html"><span class="subject-icon" aria-hidden="true">∑</span><span><strong>Matemáticas</strong><small id="math-card-progress">Ver temas · 10 lecciones</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="biologia" style="--subject:#7be2aa" href="materias/biologia.html"><span class="subject-icon" aria-hidden="true">BG</span><span><strong>Biología y Geología</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="lengua" style="--subject:#ffb18a" href="materias/lengua.html"><span class="subject-icon" aria-hidden="true">LC</span><span><strong>Lengua Castellana y Literatura</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="geografia" style="--subject:#edc272" href="materias/geografia.html"><span class="subject-icon" aria-hidden="true">GH</span><span><strong>Geografía e Historia</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="extranjera" style="--subject:#b8b4ff" href="materias/extranjera.html"><span class="subject-icon" aria-hidden="true">LE</span><span><strong>Inglés</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="tecnologia" style="--subject:#86d2ff" href="materias/tecnologia.html"><span class="subject-icon" aria-hidden="true">TD</span><span><strong>Tecnología y Digitalización</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="musica" style="--subject:#f6a7dc" href="materias/musica.html"><span class="subject-icon" aria-hidden="true">MÚ</span><span><strong>Música</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="educacion-fisica" style="--subject:#f5a7a0" href="materias/educacion-fisica.html"><span class="subject-icon" aria-hidden="true">EF</span><span><strong>Educación Física</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="religion" style="--subject:#c2ccad" href="materias/religion.html"><span class="subject-icon" aria-hidden="true">RE</span><span><strong>Religión / Atención educativa</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li></ul>
+      <details><summary>Materias optativas</summary><ul><li><a class="subject-card" data-subject="segunda-lengua" style="--subject:#a4bfff" href="materias/segunda-lengua.html"><span class="subject-icon" aria-hidden="true">2L</span><span><strong>Francés</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="emprendimiento" style="--subject:#e0dc8b" href="materias/emprendimiento.html"><span class="subject-icon" aria-hidden="true">EP</span><span><strong>Taller de Emprendimiento y Finanzas Personales</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="artes" style="--subject:#edb0ff" href="materias/artes.html"><span class="subject-icon" aria-hidden="true">AP</span><span><strong>Proyectos de Artes Plásticas y Visuales</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="proyecto" style="--subject:#78dcd6" href="materias/proyecto.html"><span class="subject-icon" aria-hidden="true">PC</span><span><strong>Trabajo monográfico o proyecto del centro</strong><small>Ver temas del curso</small></span><span class="arrow" aria-hidden="true">→</span></a></li></ul><small class="option-note">La oferta depende del centro.</small></details>
     </nav>
     <section class="math" aria-labelledby="lessons-title">
       <div class="math-head">
@@ -136,247 +52,15 @@ footer a{color:var(--accent)}
     </section>
   </div>
 </div>
-<div id="subject-view" class="subject-view" hidden>
-  <a class="subject-back" href="./">← Volver al panel</a>
-  <div class="hero"><p class="subject-label">1.º de ESO</p><h1 id="subject-name"></h1><p id="subject-reference"></p></div>
-  <nav class="topic-index" aria-labelledby="subject-topics"><h2 id="subject-topics">Temas del curso</h2><ol id="topic-links"></ol></nav>
-  <div id="topic-panels"></div>
-</div>
 </main>
 <footer><a href="https://educacion.castillalamancha.es/biblioteca-normativa/educacion-secundaria-obligatoria/educacion-secundaria-obligatoria/normativa/decreto-312024-de-25-de-junio">Currículo de Castilla-La Mancha</a> · Progreso guardado en este navegador</footer>
 <script>
-'use strict';
-const temarios = {
-  "matematicas": [
-    ["Números naturales y sistema decimal","Valor posicional, descomposición y cálculo con números naturales.",[3]],
-    ["Potencias y raíces","Significado de las potencias, propiedades, raíces exactas y aproximadas.",[1,2,4,6,7]],
-    ["Divisibilidad","Múltiplos, divisores, números primos y resolución de problemas con MCD y MCM.",["deberes"]],
-    ["Números enteros y operaciones","Recta numérica, signos y orden de las operaciones.",[5]],
-    ["Números decimales","Valor posicional, comparación y operaciones con decimales."],
-    ["Medida y sistema sexagesimal","Unidades, conversiones, tiempo y grados.",[10]],
-    ["Fracciones","Equivalencias, comparación y operaciones con fracciones."],
-    ["Proporcionalidad y porcentajes","Razones, escalas y cálculo de porcentajes."],
-    ["Lenguaje algebraico y ecuaciones","Patrones, expresiones y ecuaciones sencillas."],
-    ["Geometría plana","Rectas, ángulos, polígonos y circunferencia.",[9]],
-    ["Coordenadas, tablas y gráficas","Representación y lectura de relaciones entre cantidades."],
-    ["Perímetros, áreas y cuerpos geométricos","Cálculo de superficies y reconocimiento de cuerpos.",[8]],
-    ["Estadística y probabilidad","Tablas de frecuencias, gráficos, medidas de resumen y azar."]
-  ],
-  "biologia": [
-    ["Investigar con el método científico","Preguntas, hipótesis, experimentos y comunicación de resultados."],
-    ["Células y diversidad de los seres vivos","Funciones vitales, tipos de células, clasificación y biodiversidad."],
-    ["Los microorganismos","Bacterias, protoctistas, hongos y su papel en la naturaleza y en nuestra vida."],
-    ["Diversidad de las plantas","Nutrición, reproducción, grandes grupos y adaptaciones."],
-    ["Animales invertebrados","Características y grupos principales de animales sin columna vertebral."],
-    ["Animales vertebrados","Peces, anfibios, reptiles, aves y mamíferos."],
-    ["Funcionamiento de los ecosistemas","Factores bióticos y abióticos, relaciones y flujos de energía."],
-    ["La atmósfera","Aire, fenómenos meteorológicos, contaminación y efecto invernadero."],
-    ["La hidrosfera","Distribución y ciclo del agua, usos y gestión sostenible."],
-    ["La geosfera","Capas terrestres, minerales, rocas y recursos geológicos."]
-  ],
-  "lengua": [
-    ["Comunicación y diversidad lingüística","Emisor, receptor, contexto y lenguas de España."],
-    ["Comprensión y producción de textos","Ideas principales, planificación, revisión y exposición oral."],
-    ["Textos narrativos, descriptivos y dialogados","Narrador, personajes, descripción y diálogo."],
-    ["Textos expositivos y medios de comunicación","Explicación de ideas, noticias y verificación de fuentes."],
-    ["Léxico y formación de palabras","Familias léxicas, prefijos, sufijos y relaciones de significado."],
-    ["Clases de palabras","Sustantivos, adjetivos, determinantes, pronombres, verbos y palabras invariables."],
-    ["La oración","Grupos de palabras, sujeto, predicado y concordancia."],
-    ["Ortografía y puntuación","Acentuación, grafías y signos de puntuación."],
-    ["Lectura y géneros literarios","Narrativa, poesía, teatro y creación literaria."]
-  ],
-  "geografia": [
-    ["La Tierra y los mapas","Orientación, coordenadas, escala y lectura de mapas."],
-    ["Relieve y aguas","Formas del relieve, ríos, mares y acción del agua."],
-    ["Tiempo atmosférico y clima","Elementos del clima y lectura de climogramas."],
-    ["Paisajes y relación con el medio","Ecosistemas, riesgos y sostenibilidad."],
-    ["La Prehistoria","Paleolítico, Neolítico y Edad de los Metales."],
-    ["Mesopotamia y Egipto","Primeras ciudades, escritura, poder y sociedad."],
-    ["La antigua Grecia","Polis, ciudadanía, cultura y expansión."],
-    ["Roma y la península ibérica","República, Imperio, Hispania y patrimonio."]
-  ],
-  "extranjera": [
-    ["Introducción","Repaso de vocabulario y estructuras básicas del inglés."],
-    ["Teen Life","Vida adolescente, instituto y rutinas diarias."],
-    ["That’s Entertainment","Ocio y entretenimiento."],
-    ["Where We Live","La casa, el barrio y los lugares de la ciudad."],
-    ["Special Events","Acontecimientos deportivos y celebraciones."],
-    ["Discovering Nature","Animales y entorno natural."],
-    ["On the Go","Preparar un viaje y hablar de transportes."]
-  ],
-  "tecnologia": [
-    ["La tecnología","Productos tecnológicos, proceso de diseño, fabricación y sostenibilidad."],
-    ["Digitalización del entorno personal","Dispositivos, archivos, herramientas digitales y seguridad."],
-    ["Iniciación al diseño CAD","Representar y diseñar piezas con herramientas digitales."],
-    ["Materiales tecnológicos","Propiedades, selección, transformación y reciclaje de materiales."],
-    ["Estructuras y mecanismos","Esfuerzos, estabilidad y transmisión del movimiento."],
-    ["Electricidad y electrónica básica","Componentes, circuitos y magnitudes eléctricas."],
-    ["Pensamiento computacional con Scratch y App Inventor","Algoritmos y programación visual para crear proyectos y aplicaciones."],
-    ["Introducción a la robótica","Sensores, actuadores y control de robots."]
-  ],
-  "musica": [
-    ["Sonido y escucha","Cualidades del sonido, silencio y escucha activa."],
-    ["Ritmo y notación","Pulso, compás, figuras, pausas y tempo."],
-    ["Melodía y escritura musical","Pentagrama, notas, intervalos y escalas básicas."],
-    ["Voz e instrumentos","Familias instrumentales, agrupaciones y cuidado de la voz."],
-    ["Textura, forma y expresión","Dinámica, repetición, contraste y estructura musical."],
-    ["Interpretación y creación","Canto, movimiento, acompañamiento e improvisación."],
-    ["Músicas y culturas","Patrimonio, estilos y herramientas digitales."]
-  ],
-  "educacion-fisica": [
-    ["Actividad física y salud","Hábitos activos, calentamiento, descanso y bienestar."],
-    ["Condición física y control corporal","Resistencia, fuerza, movilidad y coordinación."],
-    ["Habilidades y juegos motores","Desplazamientos, saltos, lanzamientos y decisiones."],
-    ["Deportes de cooperación y oposición","Reglas, tácticas básicas y juego limpio."],
-    ["Expresión corporal y ritmo","Comunicación con el cuerpo y composiciones sencillas."],
-    ["Actividad física en el entorno","Orientación, seguridad y respeto al medio."],
-    ["Convivencia, inclusión y prevención","Trabajo en equipo y actuación ante accidentes."]
-  ],
-  "religion": [
-    ["Identidad y dignidad personal","Religión católica · Persona, vínculos y sentido de la vida."],
-    ["Biblia y tradiciones cristianas","Religión católica · Relatos, símbolos y contexto."],
-    ["Jesús y la comunidad cristiana","Religión católica · Vida, mensaje y comunidad."],
-    ["Patrimonio y diálogo interreligioso","Religión católica · Arte, celebraciones y convivencia."],
-    ["Proyectos de atención educativa","Si se cursa esta opción · Lectura, resolución de problemas y proyectos colaborativos definidos por el centro."]
-  ],
-  "segunda-lengua": [
-    ["Introducción","Primer contacto con los protagonistas y el francés del aula."],
-    ["Salut !","Saludar, presentarse y preguntar datos personales."],
-    ["J’adore","Expresar gustos y hablar de aficiones."],
-    ["J’habite en Suisse","Hablar de dónde vives y describir lugares."],
-    ["Ma famille","Presentar a la familia y describir a sus miembros."],
-    ["Le collège","Hablar de las asignaturas y la vida en el instituto."],
-    ["Ma semaine","Contar cómo transcurre la semana y hablar de rutinas."]
-  ],
-  "emprendimiento": [
-    ["Iniciativa y trabajo en equipo","Autoconocimiento, creatividad y colaboración."],
-    ["Ideas y proyectos","Detectar una necesidad, plantear soluciones y presentar una propuesta."],
-    ["Economía doméstica","Ingresos, gastos, presupuesto y ahorro."],
-    ["Decisiones de consumo","Necesidades, precios, publicidad y consumo responsable."]
-  ],
-  "artes": [
-    ["Elementos visuales","Punto, línea, forma, textura y composición."],
-    ["Color y luz","Mezclas, contrastes e intención expresiva."],
-    ["Técnicas y materiales","Dibujo, collage, volumen y experimentación."],
-    ["Imagen y comunicación","Lectura de imágenes, fotografía y secuencias."],
-    ["Proyecto artístico","Investigar, bocetar, producir y presentar una pieza."]
-  ],
-  "proyecto": [
-    ["Pregunta y objetivos","Tema de trabajo definido por el centro."],
-    ["Investigación y planificación","Fuentes, método de trabajo y reparto de tareas."],
-    ["Desarrollo y revisión","Crear, contrastar resultados y mejorar el proyecto."],
-    ["Presentación y evaluación","Comunicar el proceso y valorar el resultado."]
-  ]
-};
-const titulosMatematicas = ["La máquina de multiplicar","El constructor de cuadrados","Construye un número gigante","El taller de factores","La ruta de las operaciones","El cuadrado incompleto","El árbol que se multiplica","El arquitecto de cuadrados","Detectives de ángulos","La máquina del sesenta"];
-
-const referenciasTemarios = {
-  "matematicas": {
-    "book": "Anaya · Operación Mundo · ISBN 9788414305287",
-    "confirmed": [
-      2,
-      9
-    ],
-    "url": "https://centrosantabarbara.es/wp-content/uploads/2024/07/1o-ESO-MATEMATICAS-SISTEMA-RECUPERACION-24-25.pdf"
-  },
-  "biologia": {
-    "book": "Oxford · GENiOX · ISBN 9780190530105",
-    "url": "https://www.oup.es/wp-content/uploads/2024/07/Indice-BIOGEO-1ESO.pdf"
-  },
-  "lengua": {
-    "book": "McGraw Hill · ISBN 9788448626075",
-    "confirmed": []
-  },
-  "geografia": {
-    "book": "SM · Revuela · ISBN 9788413927930",
-    "confirmed": []
-  },
-  "extranjera": {
-    "book": "Burlington · Options 1 · ISBN 9789925308941",
-    "startsAtZero": true
-  },
-  "tecnologia": {
-    "book": "McGraw Hill · Tecnología y Digitalización A · ISBN 9788448627591",
-    "url": "https://www.blinklearning.com/coursePlayer/curso2.php?idcurso=4231794"
-  },
-  "segunda-lengua": {
-    "book": "Macmillan · Les Blogueurs 1 A1.1 · ISBN 9788418907791",
-    "startsAtZero": true,
-    "url": "https://www.macmillaneducation.es/wp-content/uploads/2022/05/ODS_Les_Blogueurs.pdf"
-  }
-};
-
-
-const subjectId = new URLSearchParams(window.location.search).get('materia');
-const subject = [...document.querySelectorAll('[data-subject]')].find(card => card.dataset.subject === subjectId);
-if (subject && Object.prototype.hasOwnProperty.call(temarios, subjectId)) {
-  const name = subject.querySelector('strong').textContent;
-  const view = document.getElementById('subject-view');
-  view.style.setProperty('--subject', subject.style.getPropertyValue('--subject'));
-  document.getElementById('subject-name').textContent = name;
-  document.title = name + ' · HomeSchool';
-
-  const reference = referenciasTemarios[subjectId];
-  const hasProvisionalTopics = !reference || Array.isArray(reference.confirmed);
-  const referenceLine = document.getElementById('subject-reference');
-  referenceLine.textContent = reference ? reference.book : 'Programación orientativa de 1.º de ESO';
-  if (hasProvisionalTopics) referenceLine.append(' · Los títulos provisionales están marcados.');
-  if (reference?.url) {
-    const source = document.createElement('a');
-    source.href = reference.url;
-    source.textContent = 'Ver referencia';
-    referenceLine.append(' · ', source);
-  }
-
-  const topics = temarios[subjectId];
-  const topicNumber = i => i + (reference?.startsAtZero ? 0 : 1);
-  const provisionalLabel = i =>
-    (reference && (!hasProvisionalTopics || reference.confirmed.includes(topicNumber(i))))
-      ? '' : ' <small>(provisional)</small>';
-  document.getElementById('topic-links').innerHTML = topics.map(([title], i) =>
-    '<li><a href="#tema-' + (i + 1) + '"><span>' + topicNumber(i) + '</span><div>' + title + provisionalLabel(i) + '</div></a></li>'
-  ).join('');
-  document.getElementById('topic-panels').innerHTML = topics.map(([title, summary, links = []], i) => {
-    const activities = links.map(link => link === 'deberes'
-      ? '<li><a href="deberes.html">Factorización, MCD y MCM <span class="lesson-status" id="topic-homework-progress">20 ejercicios</span></a></li>'
-      : '<li><a href="matematicas.html?leccion=' + link + '">' + titulosMatematicas[link - 1] + '<span class="lesson-status" data-done="' + link + '">Pendiente</span></a></li>'
-    ).join('');
-    return '<section class="topic-card" id="tema-' + (i + 1) + '"><h2><span class="topic-number">' + topicNumber(i) + '.</span> ' + title + provisionalLabel(i) + '</h2><p>' + summary + '</p>'
-      + (activities ? '<ul>' + activities + '</ul>' : '<small class="topic-state">Lección interactiva pendiente de publicar</small>') + '</section>';
-  }).join('');
-  document.getElementById('dashboard-view').hidden = true;
-  view.hidden = false;
-  if (/^#tema-[1-9][0-9]*$/.test(window.location.hash)) {
-    document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
-  }
+const oldSubject = new URLSearchParams(location.search).get('materia');
+const subjectLinks = {"matematicas":"materias/matematicas.html","biologia":"materias/biologia.html","lengua":"materias/lengua.html","geografia":"materias/geografia.html","extranjera":"materias/extranjera.html","tecnologia":"materias/tecnologia.html","musica":"materias/musica.html","educacion-fisica":"materias/educacion-fisica.html","religion":"materias/religion.html","segunda-lengua":"materias/segunda-lengua.html","emprendimiento":"materias/emprendimiento.html","artes":"materias/artes.html","proyecto":"materias/proyecto.html"};
+if (Object.prototype.hasOwnProperty.call(subjectLinks, oldSubject)) {
+  location.replace(subjectLinks[oldSubject] + location.hash);
 }
-
-function readProgress(key) {
-  try { return JSON.parse(localStorage.getItem(key)) ?? {}; }
-  catch { return {}; }
-}
-
-function showProgress() {
-  const math = readProgress('homeschool-v3');
-  const done = new Set(Array.isArray(math.done) ? math.done.filter(n => Number.isInteger(n) && n >= 0 && n < 10) : []);
-  document.querySelectorAll('[data-done]').forEach(mark => {
-    const complete = done.has(Number(mark.dataset.done) - 1);
-    mark.dataset.complete = String(complete);
-    mark.textContent = complete ? '✓ Completada' : 'Pendiente';
-  });
-  document.getElementById('math-progress').textContent = done.size + ' de 10 lecciones completadas';
-  document.getElementById('math-card-progress').textContent = 'Ver temas · ' + done.size + ' de 10 lecciones completadas';
-  document.getElementById('resume').textContent = Number.isInteger(math.lesson) ? 'Continuar Matemáticas →' : 'Abrir Matemáticas →';
-
-  const homework = readProgress('homeschool-deberes-divisibilidad-v1');
-  const completed = new Set(Array.isArray(homework.completed) ? homework.completed.filter(id => typeof id === 'string' && /^[0-3]-[0-4]$/.test(id)) : []);
-  document.getElementById('homework-progress').textContent = completed.size + ' de 20 ejercicios resueltos · Deberes';
-  const topicHomework = document.getElementById('topic-homework-progress');
-  if (topicHomework) topicHomework.textContent = completed.size + ' de 20 resueltos';
-}
-
-window.addEventListener('pageshow', showProgress);
-showProgress();
 </script>
+<script src="progreso-panel.js" defer></script>
 </body>
 </html>
