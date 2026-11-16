@@ -39,9 +39,9 @@ details[open] summary{margin-bottom:12px}
 .ladder td{text-align:center;width:110px;height:42px;padding:3px 8px;font-size:1.25rem;font-weight:700}
 .ladder td:first-child{border-right:3px solid var(--blue)}
 .ladder input{width:74px;text-align:center;padding:5px 8px}
-.mcd-ladders{margin:14px 0}
-.mcd-ladders .factor-work{flex:1 1 210px;min-width:0;border:1px solid var(--line);border-radius:12px;padding:12px;background:#102035}
-.mcd-ladders .factor-work h4{margin:0}
+.exercise-ladders{margin:14px 0}
+.exercise-ladders .factor-work{flex:1 1 210px;min-width:0;border:1px solid var(--line);border-radius:12px;padding:12px;background:#102035}
+.exercise-ladders .factor-work h4{margin:0}
 .ladder-pair{display:flex;flex-wrap:wrap;gap:6px 20px}
 .frac-product{color:var(--green);font-weight:750}
 .progress{display:flex;align-items:center;gap:12px;margin-top:20px}
@@ -117,18 +117,18 @@ const blocks = [
   },
   {
     label: 'MCM',
-    instruction: 'El mínimo común múltiplo es el primer múltiplo positivo de todos los números. Incluye todos los primos que aparezcan y toma de cada uno la mayor cantidad que veas en una sola lista.',
+    instruction: 'El mínimo común múltiplo es el primer múltiplo positivo de todos los números. Factoriza cada número. Incluye todos los primos que aparezcan, aunque salgan en un solo número. Para cada primo, elige el exponente mayor y multiplica las potencias elegidas.',
     steps: [
-      'Descomponemos 12 y 18 en primos.',
-      'Para que el resultado sea múltiplo de 12 necesitamos dos doses. Para que también sea múltiplo de 18 necesitamos dos treses.',
+      'Descomponemos 12 = 2² × 3 y 18 = 2 × 3². Cuando un primo aparece una sola vez, su exponente es 1.',
+      'Para el 2, compara 2² con 2¹ y elige 2². Para el 3, compara 3¹ con 3² y elige 3².',
       'Multiplicamos 2 × 2 × 3 × 3 = 36. En potencias, esto es coger el exponente mayor de cada primo que aparezca.'
     ],
     questions: [
-      [[6, 8], 'El 8 necesita tres doses. El 6 necesita un tres además de un dos.'],
-      [[15, 20], 'Los dos tienen un 5. El 20 necesita dos doses y el 15 necesita un tres.'],
-      [[9, 27], 'Los dos solo tienen treses. ¿Cuál necesita más?'],
-      [[14, 25], 'No comparten primos. Reúne todos los factores de los dos números.'],
-      [[12, 15, 20], 'Compara por separado cuántos doses, treses y cincos necesita cada número.']
+      [[6, 8], 'Para el 2, compara el exponente del 6 con el del 8 y elige el mayor. Incluye también el 3, aunque solo aparezca en el 6.'],
+      [[15, 20], 'El 5 aparece con exponente 1 en ambos números. Escríbelo una vez. Incluye también los primos que solo salen en una de las dos rayas.'],
+      [[9, 27], 'Solo aparece el primo 3. Cuenta cuántos treses hay en cada raya y quédate con la potencia que tenga el exponente mayor.'],
+      [[14, 25], 'Como no comparten primos, incluye los de las dos rayas. Si el mismo primo aparece dos veces en una raya, su exponente es 2.'],
+      [[12, 15, 20], 'Compara los exponentes del 2 en los tres números y elige el mayor. Haz lo mismo con el 3 y el 5. Multiplica las tres potencias que elegiste.']
     ]
   },
   {
@@ -216,7 +216,12 @@ function mountFactorLadder(work, number, id, solved = false, onComplete) {
 
   function draw() {
     if (current === 1) {
-      steps.innerHTML = ladder(number, divisors) + '<p class="frac-product">' + number + ' = ' + divisors.join(' × ') + '</p>';
+      const counts = new Map();
+      divisors.forEach(prime => counts.set(prime, (counts.get(prime) ?? 0) + 1));
+      const powers = [...counts].map(([prime, exponent]) => prime + (exponent > 1 ? '<sup>' + exponent + '</sup>' : ''));
+      const repeated = counts.size < divisors.length;
+      steps.innerHTML = ladder(number, divisors) + '<p class="frac-product">' + number + ' = ' + divisors.join(' × ')
+        + (repeated ? ' = ' + powers.join(' × ') : '') + '</p>';
       return;
     }
     steps.innerHTML = '<form><div>'
@@ -311,8 +316,12 @@ function exercise(question, index) {
   const id = active + '-' + index;
   if (active === 0) return factorExercise(question, index);
   const isMixed = active === 3;
+  const hasLadders = active === 1 || active === 2;
   const method = isMixed ? question[2] : blocks[active].label;
   const hint = isMixed ? question[3] : question[1];
+  const hintRule = active === 2
+    ? '<p><strong>Regla del MCM.</strong> Elige todos los primos que aparezcan. Si un primo sale en varios números, quédate con su exponente mayor. Si solo sale en uno, usa el exponente que tiene ahí.</p>'
+    : '';
   const prompt = isMixed ? question[1] : 'Calcula el ' + method + ' de ' + question[0].join(', ').replace(/, ([^,]+)$/, ' y $1') + '.';
   const expected = combine(question[0], method);
   const factText = factors => factors.join(' × ');
@@ -324,10 +333,10 @@ function exercise(question, index) {
     + (active === 1 ? '<div class="mcd-ladders"><p>Escribe el primo a la derecha y el cociente debajo. Cuando llegues a 1 en cada raya, compara los factores para calcular el MCD.</p><div class="ladder-pair"></div></div>' : '')
     + '<form class="answer-form">'
     + (isMixed ? '<label>Operación<select name="method" required><option value="">Elige</option><option>MCD</option><option>MCM</option></select></label>' : '')
-    + '<label>' + (active === 1 ? 'MCD' : 'Resultado') + '<input name="answer" required maxlength="75" inputmode="numeric" autocomplete="off"></label>'
+    + '<label>' + (hasLadders ? method : 'Resultado') + '<input name="answer" required maxlength="75" inputmode="numeric" autocomplete="off"></label>'
     + '<button class="primary">Comprobar</button></form>'
-    + '<p class="feedback" role="status"></p><details><summary>Ver pista</summary><p>' + hint + '</p></details>';
-  if (active === 1) {
+    + '<p class="feedback" role="status"></p><details><summary>Ver pista</summary>' + hintRule + '<p>' + hint + '</p></details>';
+  if (hasLadders) {
     const pair = card.querySelector('.ladder-pair');
     question[0].forEach((number, position) => {
       const work = document.createElement('section');
