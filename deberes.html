@@ -39,6 +39,9 @@ details[open] summary{margin-bottom:12px}
 .ladder td{text-align:center;width:110px;height:42px;padding:3px 8px;font-size:1.25rem;font-weight:700}
 .ladder td:first-child{border-right:3px solid var(--blue)}
 .ladder input{width:74px;text-align:center;padding:5px 8px}
+.mcd-ladders{margin:14px 0}
+.mcd-ladders .factor-work{flex:1 1 210px;min-width:0;border:1px solid var(--line);border-radius:12px;padding:12px;background:#102035}
+.mcd-ladders .factor-work h4{margin:0}
 .ladder-pair{display:flex;flex-wrap:wrap;gap:6px 20px}
 .frac-product{color:var(--green);font-weight:750}
 .progress{display:flex;align-items:center;gap:12px;margin-top:20px}
@@ -202,28 +205,24 @@ function ladder(number, divisors, interactive = false) {
     + '<th scope="col">Número</th><th scope="col">Divisor</th></tr></thead><tbody>' + rows.join('') + '</tbody></table>';
 }
 
-function factorExercise(question, index) {
-  const [number, hint] = question;
-  const id = '0-' + index;
-  const card = document.createElement('article');
-  const divisors = drafts.get(id) ?? (completed.has(id) ? primes(number) : []);
+function mountFactorLadder(work, number, id, solved = false, onComplete) {
+  const divisors = drafts.get(id) ?? (solved ? primes(number) : []);
   let current = divisors.reduce((value, divisor) => value / divisor, number);
-  card.innerHTML = '<div class="exercise-title"><h3>Ejercicio ' + (index + 1) + '</h3><small class="ok status"></small></div>'
-    + '<p>Descompón ' + number + ' en factores primos.</p><div class="factor-work"></div>'
-    + '<p class="feedback" role="status"></p><details><summary>Ver pista</summary><p>' + hint + '</p></details>';
-  const work = card.querySelector('.factor-work');
-  const feedback = card.querySelector('.feedback');
+  const feedback = document.createElement('p');
+  feedback.className = 'feedback';
+  feedback.setAttribute('role', 'status');
+  const steps = document.createElement('div');
+  work.append(steps, feedback);
 
   function draw() {
     if (current === 1) {
-      card.querySelector('.status').textContent = '✓ Resuelto';
-      work.innerHTML = ladder(number, divisors) + '<p class="frac-product">' + number + ' = ' + divisors.join(' × ') + '</p>';
+      steps.innerHTML = ladder(number, divisors) + '<p class="frac-product">' + number + ' = ' + divisors.join(' × ') + '</p>';
       return;
     }
-    work.innerHTML = '<form><div><small>Escribe el primo a la derecha y el resultado en la casilla de abajo.</small>'
+    steps.innerHTML = '<form><div>'
       + ladder(number, divisors, true)
       + '<button class="primary">Comprobar división</button></div></form>';
-    const form = work.querySelector('form');
+    const form = steps.querySelector('form');
     form.oninput = () => { feedback.textContent = ''; };
     form.onsubmit = event => {
       event.preventDefault();
@@ -248,14 +247,10 @@ function factorExercise(question, index) {
       divisors.push(divisor);
       drafts.set(id, divisors);
       current = quotient;
-      if (current === 1) {
-        completed.add(id);
-        save();
-        updateProgress();
-      }
+      if (current === 1) onComplete?.();
       draw();
       feedback.textContent = '✓ ' + division + (current === 1 ? ' Has llegado a 1.' : ' Sigue con ' + current + '.');
-      if (current > 1) work.querySelector('input').focus();
+      if (current > 1) steps.querySelector('input').focus();
       else {
         work.tabIndex = -1;
         work.focus();
@@ -263,6 +258,24 @@ function factorExercise(question, index) {
     };
   }
   draw();
+}
+
+function factorExercise(question, index) {
+  const [number, hint] = question;
+  const id = '0-' + index;
+  const card = document.createElement('article');
+  card.innerHTML = '<div class="exercise-title"><h3>Ejercicio ' + (index + 1) + '</h3><small class="ok status"></small></div>'
+    + '<p>Descompón ' + number + ' en factores primos.</p>'
+    + '<small>Escribe el primo a la derecha y el cociente en la casilla de abajo.</small><div class="factor-work"></div>'
+    + '<details><summary>Ver pista</summary><p>' + hint + '</p></details>';
+  const status = card.querySelector('.status');
+  if (completed.has(id)) status.textContent = '✓ Resuelto';
+  mountFactorLadder(card.querySelector('.factor-work'), number, id, completed.has(id), () => {
+    status.textContent = '✓ Resuelto';
+    completed.add(id);
+    save();
+    updateProgress();
+  });
   return card;
 }
 
@@ -307,12 +320,24 @@ function exercise(question, index) {
       + method + ' = ' + (expected.chosen.length > 1 ? factText(expected.chosen) + ' = ' : '') + expected.answer + '.';
   const card = document.createElement('article');
   card.innerHTML = '<div class="exercise-title"><h3>Ejercicio ' + (index + 1) + '</h3><small class="ok status"></small></div>'
-    + '<p>' + prompt + '</p><form>'
+    + '<p>' + prompt + '</p>'
+    + (active === 1 ? '<div class="mcd-ladders"><p>Escribe el primo a la derecha y el cociente debajo. Cuando llegues a 1 en cada raya, compara los factores para calcular el MCD.</p><div class="ladder-pair"></div></div>' : '')
+    + '<form class="answer-form">'
     + (isMixed ? '<label>Operación<select name="method" required><option value="">Elige</option><option>MCD</option><option>MCM</option></select></label>' : '')
-    + '<label>Resultado<input name="answer" required maxlength="75" inputmode="numeric" autocomplete="off"></label>'
+    + '<label>' + (active === 1 ? 'MCD' : 'Resultado') + '<input name="answer" required maxlength="75" inputmode="numeric" autocomplete="off"></label>'
     + '<button class="primary">Comprobar</button></form>'
     + '<p class="feedback" role="status"></p><details><summary>Ver pista</summary><p>' + hint + '</p></details>';
-  const form = card.querySelector('form');
+  if (active === 1) {
+    const pair = card.querySelector('.ladder-pair');
+    question[0].forEach((number, position) => {
+      const work = document.createElement('section');
+      work.className = 'factor-work';
+      work.innerHTML = '<h4>Descompón ' + number + '</h4>';
+      pair.append(work);
+      mountFactorLadder(work, number, id + '-factor-' + position);
+    });
+  }
+  const form = card.querySelector('.answer-form');
   const answer = form.elements.answer;
   const choice = form.elements.method;
   const feedback = card.querySelector('.feedback');
