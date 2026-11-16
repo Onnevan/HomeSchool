@@ -101,12 +101,12 @@ footer a{color:var(--accent)}
 <li><a class="subject-card" data-subject="biologia" style="--subject:#7be2aa" href="?materia=biologia"><span class="subject-icon" aria-hidden="true">BG</span><span><strong>Biología y Geología</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
 <li><a class="subject-card" data-subject="lengua" style="--subject:#ffb18a" href="?materia=lengua"><span class="subject-icon" aria-hidden="true">LC</span><span><strong>Lengua Castellana y Literatura</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
 <li><a class="subject-card" data-subject="geografia" style="--subject:#edc272" href="?materia=geografia"><span class="subject-icon" aria-hidden="true">GH</span><span><strong>Geografía e Historia</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
-<li><a class="subject-card" data-subject="extranjera" style="--subject:#b8b4ff" href="?materia=extranjera"><span class="subject-icon" aria-hidden="true">LE</span><span><strong>Lengua Extranjera</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+<li><a class="subject-card" data-subject="extranjera" style="--subject:#b8b4ff" href="?materia=extranjera"><span class="subject-icon" aria-hidden="true">LE</span><span><strong>Inglés</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
 <li><a class="subject-card" data-subject="tecnologia" style="--subject:#86d2ff" href="?materia=tecnologia"><span class="subject-icon" aria-hidden="true">TD</span><span><strong>Tecnología y Digitalización</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
 <li><a class="subject-card" data-subject="musica" style="--subject:#f6a7dc" href="?materia=musica"><span class="subject-icon" aria-hidden="true">MÚ</span><span><strong>Música</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
 <li><a class="subject-card" data-subject="educacion-fisica" style="--subject:#f5a7a0" href="?materia=educacion-fisica"><span class="subject-icon" aria-hidden="true">EF</span><span><strong>Educación Física</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
 <li><a class="subject-card" data-subject="religion" style="--subject:#c2ccad" href="?materia=religion"><span class="subject-icon" aria-hidden="true">RE</span><span><strong>Religión / Atención educativa</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li></ul>
-      <details><summary>Materias optativas</summary><ul><li><a class="subject-card" data-subject="segunda-lengua" style="--subject:#a4bfff" href="?materia=segunda-lengua"><span class="subject-icon" aria-hidden="true">2L</span><span><strong>Segunda Lengua Extranjera</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+      <details><summary>Materias optativas</summary><ul><li><a class="subject-card" data-subject="segunda-lengua" style="--subject:#a4bfff" href="?materia=segunda-lengua"><span class="subject-icon" aria-hidden="true">2L</span><span><strong>Francés</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
 <li><a class="subject-card" data-subject="emprendimiento" style="--subject:#e0dc8b" href="?materia=emprendimiento"><span class="subject-icon" aria-hidden="true">EP</span><span><strong>Taller de Emprendimiento y Finanzas Personales</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
 <li><a class="subject-card" data-subject="artes" style="--subject:#edb0ff" href="?materia=artes"><span class="subject-icon" aria-hidden="true">AP</span><span><strong>Proyectos de Artes Plásticas y Visuales</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
 <li><a class="subject-card" data-subject="proyecto" style="--subject:#78dcd6" href="?materia=proyecto"><span class="subject-icon" aria-hidden="true">PC</span><span><strong>Trabajo monográfico o proyecto del centro</strong><small>Sin lecciones publicadas</small></span><span class="arrow" aria-hidden="true">→</span></a></li></ul><small class="option-note">La oferta depende del centro.</small></details>
@@ -155,19 +155,32 @@ if (subject && Object.hasOwn(temarios, subjectId)) {
   document.getElementById('dashboard-view').hidden = true;
   view.hidden = false;
 
-  document.getElementById('subject-reference').innerHTML = subjectId === 'biologia'
-    ? 'Orden de la edición Oxford GENiOX que sitúa los microorganismos en el tema 3. <a href="https://www.oup.es/wp-content/uploads/2024/07/Indice-BIOGEO-1ESO.pdf">Consultar el índice de Oxford</a>.'
-    : 'Temario orientativo de 1.º de ESO. Pendiente de cotejar con la edición del libro o la programación del centro.';
+  const reference = referenciasTemarios[subjectId];
+  const hasProvisionalTopics = !reference || Object.hasOwn(reference, 'confirmed');
+  const referenceLine = document.getElementById('subject-reference');
+  referenceLine.textContent = reference ? reference.book : 'Programación orientativa de 1.º de ESO';
+  if (hasProvisionalTopics) referenceLine.append(' · Los títulos provisionales están marcados.');
+  if (reference?.url) {
+    const source = document.createElement('a');
+    source.href = reference.url;
+    source.textContent = 'Ver referencia';
+    referenceLine.append(' · ', source);
+  }
+
   const topics = temarios[subjectId];
+  const topicNumber = i => i + (reference?.startsAtZero ? 0 : 1);
+  const provisionalLabel = i =>
+    (reference && (!hasProvisionalTopics || reference.confirmed.includes(topicNumber(i))))
+      ? '' : ' <small>(provisional)</small>';
   document.getElementById('topic-links').innerHTML = topics.map(([title], i) =>
-    '<li><a href="#tema-' + (i + 1) + '"><span>' + (i + 1) + '</span>' + title + '</a></li>'
+    '<li><a href="#tema-' + (i + 1) + '"><span>' + topicNumber(i) + '</span><div>' + title + provisionalLabel(i) + '</div></a></li>'
   ).join('');
   document.getElementById('topic-panels').innerHTML = topics.map(([title, summary, links = []], i) => {
     const activities = links.map(link => link === 'deberes'
       ? '<li><a href="deberes.html">Factorización, MCD y MCM <span class="lesson-status" id="topic-homework-progress">20 ejercicios</span></a></li>'
       : '<li><a href="matematicas.html?leccion=' + link + '">' + titulosMatematicas[link - 1] + '<span class="lesson-status" data-done="' + link + '">Pendiente</span></a></li>'
     ).join('');
-    return '<section class="topic-card" id="tema-' + (i + 1) + '"><h2><span class="topic-number">' + (i + 1) + '.</span> ' + title + '</h2><p>' + summary + '</p>'
+    return '<section class="topic-card" id="tema-' + (i + 1) + '"><h2><span class="topic-number">' + topicNumber(i) + '.</span> ' + title + provisionalLabel(i) + '</h2><p>' + summary + '</p>'
       + (activities ? '<ul>' + activities + '</ul>' : '<small class="topic-state">Lección interactiva pendiente de publicar</small>') + '</section>';
   }).join('');
   if (/^#tema-[1-9][0-9]*$/.test(window.location.hash)) {
