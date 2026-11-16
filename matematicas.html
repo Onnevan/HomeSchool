@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101d31"><meta name="description" content="HomeSchool 3.0: aprende matemáticas visualmente, manipulando ideas y resolviendo retos.">
+<meta name="theme-color" content="#151619"><meta name="description" content="HomeSchool 3.0: aprende matemáticas visualmente, manipulando ideas y resolviendo retos.">
 <title>HomeSchool 3.0 · Laboratorio visual de Matemáticas</title>
+<link rel="stylesheet" href="tema.css">
 <style>
 :root{--bg:#0b1527;--panel:#162841;--panel2:#1b3452;--line:#36526e;--ink:#f2f7ff;--muted:#b8cadb;--blue:#72bdf9;--gold:#f7bd69;--green:#6ed4ae;--red:#fa9b95}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at top,#183450 0,#0c192c 60%,#091323 100%);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
@@ -71,7 +72,18 @@ h1{font-size:clamp(30px,5vw,56px);line-height:1.08;margin:12px 0}h2{font-size:cl
 .dec-scale-note{text-align:center;font-size:14px;color:#aecde4;margin:0 0 12px}
 .dec-delta{text-align:center;font-size:clamp(18px,2.7vw,26px);font-weight:800;color:#ffd282;background:#263f57;border-radius:11px;padding:10px}
 @media(max-width:650px){.dec-segments{grid-template-columns:repeat(2,minmax(0,1fr))}.dec-segment:last-child{grid-column:1/-1}.dec-segment{min-height:85px}}
-.power-history{display:flex;justify-content:center;gap:8px;align-items:center;flex-wrap:wrap;margin:18px 0}.power-step{padding:10px 14px;border:1px solid #6eafdb;background:#204a69;font-size:25px;font-weight:850;border-radius:10px}.power-step.current{border:2px solid #f6c56c;background:#2376ac}.power-arrow{color:#c7e2f1;font-size:24px}.power-grow{animation:powerIn .4s ease both}@keyframes powerIn{from{opacity:.1;transform:scale(.78)}to{opacity:1;transform:scale(1)}}</style></head>
+.power-history{display:flex;justify-content:center;gap:8px;align-items:center;flex-wrap:wrap;margin:18px 0}.power-step{padding:10px 14px;border:1px solid #6eafdb;background:#204a69;font-size:25px;font-weight:850;border-radius:10px}.power-step.current{border:2px solid #f6c56c;background:#2376ac}.power-arrow{color:#c7e2f1;font-size:24px}.power-grow{animation:powerIn .4s ease both}@keyframes powerIn{from{opacity:.1;transform:scale(.78)}to{opacity:1;transform:scale(1)}}
+:root{--bg:var(--surface-page);--panel:var(--surface-panel);--panel2:var(--surface-raised);--line:var(--surface-border);--ink:var(--text-main);--muted:var(--text-muted)}
+body{background:var(--bg)}
+header .small,.eyebrow,.stage-label{color:var(--math-accent)}
+.homework-link,button.primary,button.secondary,.stages button,.courses button{background:var(--surface-raised);border-color:var(--line);color:var(--ink)}
+.homework-link,button.primary,.stages button.active,.courses button.active{border-color:var(--math-accent);color:var(--math-accent)}
+.stages button.active,.courses button.active{background:var(--surface-raised)}
+.homework-link:hover,button.primary:hover,button.secondary:hover,.stages button:hover,.courses button:hover{background:var(--surface-hover)}
+.homework-link:focus-visible,.nav button:focus-visible,.stages button:focus-visible,.courses button:focus-visible{outline-color:var(--math-accent)}
+.progress{background:var(--surface-raised)}
+.progress>div{background:var(--math-accent)}
+</style></head>
 <body><header><a class="homework-link" href="./">← Inicio de HomeSchool</a><div class="small">MATEMÁTICAS · 1.º ESO</div></header>
 <main class="wrap">
 <section class="hero"><div class="eyebrow">Laboratorio de pensamiento visual</div><h1>Primero lo ves.<br>Después lo entiendes.</h1>

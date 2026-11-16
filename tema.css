@@ -1,0 +1,11 @@
+:root {
+  color-scheme: dark;
+  --surface-page: #151619;
+  --surface-panel: #202226;
+  --surface-raised: #292c31;
+  --surface-hover: #34373e;
+  --surface-border: #454951;
+  --text-main: #f4f4f5;
+  --text-muted: #c2c4cb;
+  --math-accent: #d8f375;
+}
